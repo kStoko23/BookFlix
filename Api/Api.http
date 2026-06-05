@@ -1,0 +1,170 @@
+@host = http://localhost:8080
+
+### POST register account
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test",
+  "username": "test"
+}
+
+### POST login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test"
+}
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### GET all books
+GET {{host}}/api/books
+Accept: application/json
+
+### GET all books with pagination
+GET {{host}}/api/books?page=2&pageSize=12
+Accept: application/json
+
+### GET book via search
+GET {{host}}/api/books?search=Akilah Balistreri
+Accept: application/json
+
+### GET book by ID
+GET {{host}}/api/books/480
+Accept: application/json
+
+### POST a book with correct body
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST a book with missing field
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST a book without authorization
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST a book with invalid token
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer bad_token
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### PUT change book 
+PUT {{host}}/api/books/7
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "Akilah Balistreri",
+  "isbn": "0924170093",
+  "pages": 2112,
+  "rating": 4
+}
+
+### PUT change book with invalid ID
+PUT {{host}}/api/books/472
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "Lorean Shields",
+  "isbn": "1937207730",
+  "pages": 2026,
+  "rating": 4
+}
+
+### PUT change book with missing field
+PUT {{host}}/api/books/7
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "",
+  "author": "Lorean Shields",
+  "isbn": "1937207730",
+  "pages": 2026,
+  "rating": 4
+}
+
+### PUT change book with invalid token
+PUT {{host}}/api/books/7
+Content-Type: application/json
+Authorization: Bearer invalid_token
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "Lorean Shields",
+  "isbn": "1937207730",
+  "pages": 2026,
+  "rating": 4
+}
+
+### PUT change book without token
+PUT {{host}}/api/books/7
+Content-Type: application/json
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "Lorean Shields",
+  "isbn": "1937207730",
+  "pages": 2026,
+  "rating": 4
+}
+
+### DELETE book 
+DELETE {{host}}/api/books/7
+Authorization: Bearer {{token}}
+
+### DELETE book with invalid ID
+DELETE {{host}}/api/books/734
+Authorization: Bearer {{token}}
+
+### DELETE book with invalid token
+DELETE {{host}}/api/books/7
+Authorization: Bearer invalid_token
+
+### DELETE book without token 
+DELETE {{host}}/api/books/7
