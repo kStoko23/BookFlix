@@ -1,0 +1,22 @@
+<nav class="flex items-center justify-between px-6 bg-primary border-b border-border">
+  <a routerLink="/" class="flex items-center no-underline">
+    <img src="/bookflix_logo.svg" alt="BookFlix" class="w-72 h-auto" />
+  </a>
+
+  <ul class="flex gap-8">
+    <li><a routerLink="/" routerLinkActive="text-content-primary" class="text-content-secondary hover:text-content-primary text-lg transition-colors">Odkryj</a></li>
+    <li><a routerLink="/categories" routerLinkActive="text-content-primary" class="text-content-secondary hover:text-content-primary text-lg transition-colors">Kategorie</a></li>
+    <li><a routerLink="/top" routerLinkActive="text-content-primary" class="text-content-secondary hover:text-content-primary text-lg transition-colors">Top 10</a></li>
+  </ul>
+
+  <div class="flex items-center gap-3">
+    @if (authService.isAuthenticated()) {
+      <a routerLink="/profile" class="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-lg font-medium">
+        {{ initials() }}
+      </a>
+    } @else {
+      <a routerLink="/auth/login" class="text-content-primary border border-border rounded-md px-4 py-1.5 text-lg hover:border-border-strong transition-colors">Zaloguj się</a>
+      <a routerLink="/auth/register" class="bg-accent hover:bg-accent-hover text-white rounded-md px-4 py-1.5 text-lg transition-colors">Zarejestruj</a>
+    }
+  </div>
+</nav>
