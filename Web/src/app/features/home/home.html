@@ -1,11 +1,16 @@
-@if (isLoading()) {
+<!-- @if (isLoading()) {
   <p>Ładowanie...</p>
 } @else if (error()) {
   <p>{{ error() }}</p>
 } @else {
   <ul>
     @for (book of books(); track book.id) {
-      <li>{{ book.title }} - {{ book.author }}</li>
+      <li>#{{ book.id }} {{ book.title }} - {{ book.author }}</li>
     }
   </ul>
-}
+} -->
+
+
+<app-hero></app-hero>
+<!-- <app-book-list></app-book-list> -->
+<!-- <app-popular-books></app-popular-books> -->

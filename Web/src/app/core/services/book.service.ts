@@ -11,8 +11,15 @@ export class BookService {
   private readonly apiUrl = environment.apiUrl + '/books';
   private httpClient = inject(HttpClient);
 
-  getBooks(): Observable<PagedResponse<Book>> {
-    return this.httpClient.get<PagedResponse<Book>>(`${this.apiUrl}`);
+  getBooks(page?: number, pageSize?: number): Observable<PagedResponse<Book>> {
+    const params: any = {};
+    if (page !== undefined) {
+      params.page = page;
+    }
+    if (pageSize !== undefined) {
+      params.pageSize = pageSize;
+    }
+    return this.httpClient.get<PagedResponse<Book>>(`${this.apiUrl}`, { params });
   }
 
   getBook(id: number): Observable<Book> {

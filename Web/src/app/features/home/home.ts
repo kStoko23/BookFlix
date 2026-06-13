@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { BookService } from '../../core/services/book.service';
 import { Book, PagedResponse } from '../../core/models/book.model';
+import { Hero } from '../../shared/components/hero/hero';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [Hero],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

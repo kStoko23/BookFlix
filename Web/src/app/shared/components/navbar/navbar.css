@@ -1,0 +1,10 @@
+.nav-link {
+  color: var(--color-content-secondary);
+  font-size: 1.125rem;
+  transition: color 0.15s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-content-primary);
+}
