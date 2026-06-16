@@ -26,6 +26,19 @@ export class BookService {
     return this.httpClient.get<Book>(`${this.apiUrl}/${id}`);
   }
 
+  getMyBooks(page?: number, pageSize?: number): Observable<PagedResponse<Book>> {
+    const params: any = {};
+
+    if (page !== undefined) {
+      params.page = page;
+    }
+    if (pageSize !== undefined) {
+      params.pageSize = pageSize;
+    }
+
+    return this.httpClient.get<PagedResponse<Book>>(`${this.apiUrl}/mine`, { params });
+  }
+
   createBook(book: CreateBookRequest): Observable<Book> {
     return this.httpClient.post<Book>(`${this.apiUrl}`, book);
   }

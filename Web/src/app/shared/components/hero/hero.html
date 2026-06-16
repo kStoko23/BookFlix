@@ -7,10 +7,10 @@
       <img [src]="getImageUrl(book)" [alt]="book.title" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.4) 65%, transparent 100%)"></div>
 
-      <div class="relative flex flex-col items-start justify-end gap-6 2xl:gap-10 pl-32 max-w-1/2 max-h-[600px]">
+      <div class="relative flex flex-col items-start justify-end gap-6 2xl:gap-10 pl-14 2xl:pl-32 max-w-1/2 max-h-[600px]">
         <span class="bg-accent text-white text-xs font-medium px-2.5 py-1 rounded ">{{ book.category | categoryLabels }}</span>
         <h1 class="font-mono text-6xl 2xl:text-8xl font-bold text-content-primary leading-tight">{{ book.title }}</h1>
-        <p class="text-content-secondary text-lg 2xl:text-2xl mb-1">{{ book.description | descriptionLength:100 }}</p>
+        <p class="text-content-secondary text-lg 2xl:text-2xl mb-1">{{ book.description | descriptionLength:150 }}</p>
         <app-button variant="primary" (clicked)="navigateToBook(book.id)">
           Read more
         </app-button>
@@ -21,7 +21,7 @@
   <div class="absolute bottom-0 left-0 w-full h-2 hover:h-6 bg-white/30 flex transition-all">
   @for (book of books(); track book.id; let i = $index) {
     <button (click)="goToSlide(i)"
-            class="w-full cursor-pointer"
+            class="w-full cursor-pointer hover:bg-white/35"
             [class.bg-accent]="currentIndex() === i"
             [class.animation-fill]="currentIndex() === i">
     </button>

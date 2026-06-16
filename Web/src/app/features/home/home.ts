@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { BookService } from '../../core/services/book.service';
 import { Book, PagedResponse } from '../../core/models/book.model';
 import { Hero } from '../../shared/components/hero/hero';
+import { UserBooks } from "../../shared/components/user-books/user-books";
 
 @Component({
   selector: 'app-home',
-  imports: [Hero],
+  imports: [Hero, UserBooks],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -18,16 +19,6 @@ export class Home {
   error = signal<string | null>(null);
 
   ngOnInit() {
-    this.bookService.getBooks().subscribe({
-      next: (response: PagedResponse<Book>) => {
-        this.books.set(response.items);
-        this.totalCount.set(response.totalCount);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        this.error.set(err.message + 'Nie udało się załadować książek.');
-        this.isLoading.set(false);
-      }
-    });
+
   }
 }

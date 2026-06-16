@@ -1,1 +1,39 @@
-<p>user-books works!</p>
+<section class="bg-primary py-8 px-6 lg:px-14">
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
+    <span class="font-sans text-sm text-content-muted">{{ books().length }} books</span>
+  </div>
+
+    <div class="">
+      <swiper-container
+        slides-per-view="2"
+        space-between="20"
+        navigation="true"
+        breakpoints='{"640":{"slidesPerView":3},"768":{"slidesPerView":4},"1280":{"slidesPerView":5},"1536":{"slidesPerView":6},"1920":{"slidesPerView":8}}'>
+
+        @for (book of books(); track book.id) {
+          <swiper-slide>
+            <div (click)="navigateToBook(book.id)"
+                 class="relative w-full bg-card rounded-md overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-105 group">
+
+              <img [src]="getImageUrl(book)" [alt]="book.title" class="w-full h-[380px] lg:h-[450px] object-cover" />
+
+              <span class="absolute top-2 right-2 bg-accent text-white text-md font-bold px-1.5 py-0.5 rounded">
+                ★ {{ book.rating }}
+              </span>
+
+              <div class="hidden lg:flex absolute inset-0 flex-col items-center justify-center text-center bg-black/85 p-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <p class="font-sans text-content-primary text-lg font-medium elipsis mb-0.5">{{ book.title }}</p>
+                <p class="font-sans text-content-secondary text-md truncate">{{ book.author }}</p>
+              </div>
+              <div class="lg:hidden absolute bottom-0 inset-x-0 flex flex-col items-center justify-center text-center bg-black/85 p-2.5 h-[120px]">
+                <p class="font-sans text-content-primary text-lg font-medium elipsis mb-0.5">{{ book.title }}</p>
+                <p class="font-sans text-content-secondary text-md truncate">{{ book.author }}</p>
+              </div>
+            </div>
+          </swiper-slide>
+        }
+
+      </swiper-container>
+    </div>
+</section>
