@@ -5,31 +5,18 @@
          [class.opacity-0]="currentIndex() !== i">
 
       <img [src]="getImageUrl(book)" [alt]="book.title" class="absolute inset-0 w-full h-full object-cover" />
-      <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)"></div>
+      <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.4) 65%, transparent 100%)"></div>
 
-      <div class="relative flex flex-col items-start justify-end gap-10 pl-32 max-w-1/2">
-        <!-- <span class="bg-accent text-white text-xs font-medium px-2.5 py-1 rounded mb-3">Recommended</span> -->
-        <h1 class="font-mono text-8xl font-bold text-content-primary leading-tight">{{ book.title }}</h1>
-        <p class="text-content-secondary text-2xl">author: {{ book.author }}</p>
+      <div class="relative flex flex-col items-start justify-end gap-6 2xl:gap-10 pl-32 max-w-1/2 max-h-[600px]">
+        <span class="bg-accent text-white text-xs font-medium px-2.5 py-1 rounded ">{{ book.category | categoryLabels }}</span>
+        <h1 class="font-mono text-6xl 2xl:text-8xl font-bold text-content-primary leading-tight">{{ book.title }}</h1>
+        <p class="text-content-secondary text-lg 2xl:text-2xl mb-1">{{ book.description | descriptionLength:100 }}</p>
         <app-button variant="primary" (clicked)="navigateToBook(book.id)">
           Read more
         </app-button>
       </div>
     </div>
   }
-
-  <button (click)="changeSlide(-1)"
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/50 border border-border text-white flex items-center justify-center hover:bg-black/80 cursor-pointer transition-colors">
-    <svg class="" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.5 17L9.5 12L14.5 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
-  <button (click)="changeSlide(1)"
-          class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/50 border border-border text-white flex items-center justify-center hover:bg-black/80 cursor-pointer transition-colors">
-    <svg class="" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.5 7L14.5 12L9.5 17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
 
   <div class="absolute bottom-0 left-0 w-full h-2 hover:h-6 bg-white/30 flex transition-all">
   @for (book of books(); track book.id; let i = $index) {

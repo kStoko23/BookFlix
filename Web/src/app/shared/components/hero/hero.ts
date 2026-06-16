@@ -3,10 +3,12 @@ import { BookService } from '../../../core/services/book.service';
 import { Router } from '@angular/router';
 import { Book } from '../../../core/models/book.model';
 import { Button } from '../button/button';
+import { CategoryLabelsPipe } from '../../pipes/category-labels.pipe';
+import { DescriptionLengthPipe } from '../../pipes/description-length.pipe';
 
 @Component({
   selector: 'app-hero',
-  imports: [Button],
+  imports: [Button, CategoryLabelsPipe, DescriptionLengthPipe],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
 })
