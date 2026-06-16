@@ -31,12 +31,12 @@
     </svg>
   </button>
 
-  <div class="absolute bottom-0 left-0 w-full h-2 hover:h-6 flex transition-all duration-300">
+  <div class="absolute bottom-0 left-0 w-full h-2 hover:h-6 bg-white/30 flex transition-all">
   @for (book of books(); track book.id; let i = $index) {
     <button (click)="goToSlide(i)"
-            class="w-full transition-all duration-300 cursor-pointer"
+            class="w-full cursor-pointer"
             [class.bg-accent]="currentIndex() === i"
-            [class.bg-white/30]="currentIndex() !== i">
+            [class.animation-fill]="currentIndex() === i">
     </button>
   }
 </div>

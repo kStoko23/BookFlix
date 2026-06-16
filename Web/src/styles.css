@@ -27,3 +27,19 @@
   background-color: var(--color-accent);
   color: var(--color-content-primary);
 }
+
+.animation-fill {
+  background: linear-gradient(to right, transparent 50%, var(--color-accent) 50%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  animation: fill 8s linear forwards;
+}
+
+@keyframes fill {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: -100% 0%;
+  }
+}

@@ -32,6 +32,11 @@ public static class BooksEndpoints
                 EF.Functions.ILike(x.Title, pattern) ||
                 EF.Functions.ILike(x.Author, pattern));
         }
+        
+        if (parameters.Category.HasValue)
+        {
+            query = query.Where(x => x.Category == parameters.Category.Value);
+        }
 
         var totalCount = await query.CountAsync();
 
@@ -44,6 +49,8 @@ public static class BooksEndpoints
                 Id = x.Id,
                 Title = x.Title,
                 Author = x.Author,
+                Description = x.Description,
+                Category = x.Category,
                 Isbn = x.Isbn,
                 Pages = x.Pages,
                 Rating = x.Rating
@@ -68,6 +75,8 @@ public static class BooksEndpoints
                 Id = x.Id,
                 Title = x.Title,
                 Author = x.Author,
+                Description = x.Description,
+                Category = x.Category,
                 Isbn = x.Isbn,
                 Pages = x.Pages,
                 Rating = x.Rating
@@ -90,6 +99,8 @@ public static class BooksEndpoints
         {
             Title = request.Title.Trim(),
             Author = request.Author.Trim(),
+            Description = request.Description.Trim(),
+            Category =  request.Category,
             Isbn = request.Isbn.Trim(),
             Pages = request.Pages,
             Rating = request.Rating,
@@ -104,6 +115,8 @@ public static class BooksEndpoints
             Id = book.Id,
             Title = book.Title,
             Author = book.Author,
+            Description =  book.Description,
+            Category = book.Category,
             Isbn = book.Isbn,
             Pages = book.Pages,
             Rating = book.Rating,
@@ -120,6 +133,10 @@ public static class BooksEndpoints
             errors["title"] = ["Title is required"];
         if (string.IsNullOrWhiteSpace(request.Author))
             errors["author"] = ["Author is required"];
+        if (string.IsNullOrWhiteSpace(request.Description))
+            request.Description = "No description provided";
+        if (!Enum.IsDefined(typeof(BookCategory), request.Category))
+            errors["category"] = ["Invalid category"];
         if (string.IsNullOrWhiteSpace(request.Isbn))
             errors["isbn"] = ["ISBN is required"];
         if (request.Pages <= 0)
@@ -143,6 +160,8 @@ public static class BooksEndpoints
         
         book.Title = request.Title.Trim();
         book.Author = request.Author.Trim();
+        book.Description = request.Description.Trim();
+        book.Category = request.Category;
         book.Isbn = request.Isbn.Trim();
         book.Pages = request.Pages;
         book.Rating = request.Rating;
@@ -159,6 +178,10 @@ public static class BooksEndpoints
             errors["title"] = ["Title is required"];
         if (string.IsNullOrWhiteSpace(request.Author))
             errors["author"] = ["Author is required"];
+        if (string.IsNullOrWhiteSpace(request.Description))
+            request.Description = "No description provided";
+        if (!Enum.IsDefined(request.Category))
+            errors["category"] = ["Invalid category"];
         if (string.IsNullOrWhiteSpace(request.Isbn))
             errors["isbn"] = ["ISBN is required"];
         if (request.Pages <= 0)
@@ -178,6 +201,5 @@ public static class BooksEndpoints
         db.Books.Remove(book);
         await db.SaveChangesAsync();
         return Results.NoContent();
-
     }
 }

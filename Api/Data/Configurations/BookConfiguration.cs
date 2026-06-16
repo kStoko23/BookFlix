@@ -24,6 +24,13 @@ public class BookConfiguration: IEntityTypeConfiguration<Book>
                 .HasColumnName("Author")
                 .HasMaxLength(200)
                 .IsRequired();
+        builder.Property(x => x.Description)
+                .HasColumnName("Description")
+                .HasMaxLength(1200);
+        builder.Property(x => x.Category)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .IsRequired();
         builder.Property(x => x.Isbn)
                 .HasColumnName("Isbn")
                 .HasMaxLength(10)
@@ -47,7 +54,5 @@ public class BookConfiguration: IEntityTypeConfiguration<Book>
                 .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Isbn).IsUnique();
-        builder.HasIndex(x => x.Title).IsUnique();
-        builder.HasIndex(x => x.Author).IsUnique();
     }
 }

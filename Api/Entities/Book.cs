@@ -5,6 +5,8 @@ public class Book
     public long Id { get; set; }
     public string Title { get; set; } = null;
     public string Author { get; set; } = null;
+    public string? Description { get; set; } = null;
+    public BookCategory Category { get; set; }
     public string Isbn { get; set; } = null;
     public int Pages { get; set; }
     public int Rating { get; set; }
