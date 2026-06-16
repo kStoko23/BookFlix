@@ -16,15 +16,28 @@ export class AuthService {
   private router = inject(Router);
 
   isAuthenticated(): boolean {
-    const token = this.tokenService.getToken();
-    if (!token) return false;
+    const payload = this.decodeToken();
+    return payload != null && payload.exp > Date.now() / 1000;
+  }
 
+  private decodeToken(): any | null {
+    const token = this.tokenService.getToken();
+    if (!token) return null;
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp > Date.now() / 1000;
-    } catch (error) {
-      return false;
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch {
+      return null;
     }
+  }
+
+  getUserId(): number | null {
+    const payload = this.decodeToken();
+    if (!payload) return null;
+
+    const nameId =
+      payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    return nameId != null ? Number(nameId) : null;
   }
 
   login(email: string, password: string) {
