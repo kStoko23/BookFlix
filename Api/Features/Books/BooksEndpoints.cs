@@ -13,9 +13,59 @@ public static class BooksEndpoints
         var group = app.MapGroup("/api/books").WithTags("Books");
         group.MapGet("/", GetBooks);
         group.MapGet("/{id:long}", GetBook);
+        group.MapGet("/mine", GetMyBooks).RequireAuthorization();
         group.MapPost("/", CreateBook).RequireAuthorization();
         group.MapPut("/{id:long}", PutBook).RequireAuthorization();
         group.MapDelete("/{id:long}", DeleteBook).RequireAuthorization();
+    }
+
+    private static async Task<IResult> GetMyBooks(BooksDbContext db, [AsParameters] BookQueryParameters parameters, ClaimsPrincipal user)
+    {
+        var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var page = Math.Max(parameters.Page ?? 1, 1);
+        var pageSize = Math.Clamp(parameters.PageSize ?? 20, 1, 100);
+
+        var query = db.Books.AsNoTracking().Where(x => x.UserId == userId);
+
+        if (!string.IsNullOrWhiteSpace(parameters.Search))
+        {
+            var pattern = $"%{parameters.Search.Trim()}%";
+            query = query.Where(x =>
+                EF.Functions.ILike(x.Title, pattern) ||
+                EF.Functions.ILike(x.Author, pattern));
+        }
+        
+        if (parameters.Category.HasValue)
+        {
+            query = query.Where(x => x.Category == parameters.Category.Value);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var books = await query
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new BookResponse
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Author = x.Author,
+                Description = x.Description,
+                Category = x.Category,
+                Isbn = x.Isbn,
+                Pages = x.Pages,
+                Rating = x.Rating
+            })
+            .ToListAsync();
+
+        return Results.Ok(new
+        {
+            items = books,
+            totalCount,
+            page,
+            pageSize
+        });
     }
 
     private static async Task<IResult> GetBooks(BooksDbContext db, [AsParameters] BookQueryParameters parameters)

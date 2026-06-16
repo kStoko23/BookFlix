@@ -32,7 +32,7 @@ public class JwtService
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddMinutes(
+            expires: DateTime.UtcNow.AddMinutes(
                 double.Parse(_config["Jwt:ExpirationMinutes"]!)),
             signingCredentials: credentials
         );
