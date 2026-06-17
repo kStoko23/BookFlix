@@ -1,4 +1,12 @@
-import { Component, inject, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  viewChild,
+} from '@angular/core';
 import { BookService } from '../../../core/services/book.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Book } from '../../../core/models/book.model';
@@ -14,24 +22,33 @@ register();
 })
 export class UserBooks implements OnInit {
   private bookService = inject(BookService);
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private router = inject(Router);
+  private swiperRef = viewChild<ElementRef>('swiperRef');
 
   books = signal<Book[]>([]);
 
   ngOnInit() {
     if (!this.authService.isAuthenticated()) {
+      //for testing until login is implemented
       this.bookService.getMyBooks(1, 20).subscribe({
-        next: res => this.books.set(res.items)
+        next: (res) => this.books.set(res.items),
       });
     }
   }
 
   getImageUrl(book: Book): string {
-    return `https://picsum.photos/seed/book${book.id}/140/200`;
+    return `https://picsum.photos/seed/book${book.id}/250/600`;
   }
 
   navigateToBook(id: number) {
     this.router.navigate(['/books', id]);
+  }
+
+  next() {
+    this.swiperRef()?.nativeElement.swiper.slideNext();
+  }
+  prev() {
+    this.swiperRef()?.nativeElement.swiper.slidePrev();
   }
 }
