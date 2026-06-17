@@ -1,5 +1,4 @@
 import { Component, computed, inject } from '@angular/core';
-import { TokenService } from '../../../core/auth/token.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Button } from '../button/button';
@@ -14,9 +13,7 @@ export class Navbar {
   authService = inject(AuthService);
 
   initials = computed(() => {
-    const token = inject(TokenService).getToken();
-    if (!token) return '';
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.username?.slice(0, 2).toUpperCase() ?? 'U';
+    const username = this.authService.user()?.username;
+    return username ? username.slice(0, 2).toUpperCase() : 'U';
   });
 }

@@ -1,1 +1,96 @@
-<p>register works!</p>
+<section class="min-h-screen flex items-center justify-center bg-primary px-4 py-12">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="w-full max-w-md space-y-6 rounded-xl border border-border bg-card/95 p-8 shadow-2xl shadow-black/50"
+  >
+    <div class="space-y-1.5">
+      <h1 class="font-mono text-3xl font-bold text-content-primary">Create account</h1>
+      <p class="font-sans text-sm text-content-secondary">Start building your reading list.</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="space-y-1.5">
+        <input
+          formControlName="username"
+          placeholder="Username"
+          class="w-full rounded-md border border-border bg-elevated px-4 py-3 font-sans text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+        />
+        @if (form.controls.username.touched && form.controls.username.errors) {
+          <p class="font-sans text-sm text-red-400">
+            @if (form.controls.username.errors['required']) {
+              Username is required
+            } @else if (form.controls.username.errors['minlength']) {
+              At least 3 characters
+            }
+          </p>
+        }
+      </div>
+
+      <div class="space-y-1.5">
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="Email"
+          class="w-full rounded-md border border-border bg-elevated px-4 py-3 font-sans text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="font-sans text-sm text-red-400">Enter a valid email</p>
+        }
+      </div>
+
+      <div class="space-y-1.5">
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+          class="w-full rounded-md border border-border bg-elevated px-4 py-3 font-sans text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+        />
+        @if (form.controls.password.touched && form.controls.password.errors) {
+          <p class="font-sans text-sm text-red-400">
+            @if (form.controls.password.errors['required']) {
+              Password is required
+            } @else if (form.controls.password.errors['minlength']) {
+              At least 6 characters
+            }
+          </p>
+        }
+      </div>
+
+      <div class="space-y-1.5">
+        <input
+          formControlName="confirmPassword"
+          type="password"
+          placeholder="Confirm password"
+          class="w-full rounded-md border border-border bg-elevated px-4 py-3 font-sans text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+        />
+        @if (form.errors?.['passwordsMismatch'] && form.controls.confirmPassword.touched) {
+          <p class="font-sans text-sm text-red-400">Passwords don't match</p>
+        }
+      </div>
+    </div>
+
+    @if (error()) {
+      <p
+        class="rounded-md bg-accent-dark/20 border border-accent-dark px-3 py-2 font-sans text-sm text-content-primary"
+      >
+        {{ error() }}
+      </p>
+    }
+
+    <button
+      type="submit"
+      [disabled]="loading()"
+      class="w-full rounded-md bg-accent py-3 font-sans font-semibold text-content-primary transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {{ loading() ? 'Creating account…' : 'Register' }}
+    </button>
+
+    <p class="text-center font-sans text-sm text-content-secondary">
+      Already have an account?
+      <a routerLink="/auth/login" class="text-content-primary underline-offset-4 hover:underline"
+        >Sign in</a
+      >
+    </p>
+  </form>
+</section>

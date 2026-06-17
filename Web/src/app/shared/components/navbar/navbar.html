@@ -1,5 +1,5 @@
 <nav class="flex items-center px-6 lg:px-14 bg-primary border-b border-border py-4">
-  <a routerLink="/" class="flex items-center no-underline text-xl font-bold ">
+  <a routerLink="/" class="flex items-center no-underline text-xl font-bold">
     <span class="text-content-primary">Book</span><span class="text-accent">Flix</span>
   </a>
 
@@ -10,10 +10,9 @@
   </ul>
 
   <div class="flex items-center gap-3">
-    @if (authService.isAuthenticated()) {
-      <a routerLink="/profile" class="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-lg font-medium">
-        {{ initials() }}
-      </a>
+    @if (authService.isLoggedIn()) {
+      <div class="avatar">{{ initials() }}</div>
+      <app-button (click)="authService.logout()">Logout</app-button>
     } @else {
       <app-button variant="outline" href="/auth/login">Log&nbsp;in</app-button>
       <app-button variant="primary" href="/auth/register">Register</app-button>

@@ -29,8 +29,7 @@ export class UserBooks implements OnInit {
   books = signal<Book[]>([]);
 
   ngOnInit() {
-    if (!this.authService.isAuthenticated()) {
-      //for testing until login is implemented
+    if (this.authService.isLoggedIn()) {
       this.bookService.getMyBooks(1, 20).subscribe({
         next: (res) => this.books.set(res.items),
       });
