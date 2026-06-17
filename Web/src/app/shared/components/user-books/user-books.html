@@ -35,9 +35,9 @@
     <div class="relative">
       <swiper-container
         #swiperRef
-        slides-per-view="2"
+        slides-per-view="1"
         space-between="20"
-        breakpoints='{"640":{"slidesPerView":3},"768":{"slidesPerView":4},"1280":{"slidesPerView":5},"1536":{"slidesPerView":6},"1920":{"slidesPerView":8}}'
+        breakpoints='{"480": {"slidesPerView": 2}, "640": {"slidesPerView": 3}, "768": {"slidesPerView": 4}, "1280": {"slidesPerView": 5}, "1536": {"slidesPerView": 6}, "1920": {"slidesPerView": 8}}'
       >
         @for (book of books(); track book.id) {
           <swiper-slide>
@@ -48,7 +48,7 @@
               <img
                 [src]="getImageUrl(book)"
                 [alt]="book.title"
-                class="w-full h-[380px] lg:h-[450px] object-cover object-center"
+                class="w-full h-[450px] object-cover object-center"
               />
 
               <span

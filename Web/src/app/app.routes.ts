@@ -4,14 +4,16 @@ import { Home } from './features/home/home';
 import { Register } from './features/auth/register/register';
 import { Login } from './features/auth/login/login';
 import { Profile } from './features/profile/profile';
+import { BookDetails } from './features/books/book-details/book-details';
 
 export const routes: Routes = [
-    { path: 'auth/login', component: Login },
-    { path: 'auth/register', component: Register },
-    { path: '', component: Home },
-    {
-        path: 'profile',
-        component: Profile,
-        canActivate: [authGuard]
-    },
+  { path: 'auth/login', component: Login },
+  { path: 'auth/register', component: Register },
+  { path: 'books/:id', component: BookDetails },
+  { path: '', component: Home },
+  {
+    path: 'profile',
+    component: Profile,
+    canActivate: [authGuard],
+  },
 ];
