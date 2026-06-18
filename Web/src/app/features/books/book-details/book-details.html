@@ -1,13 +1,11 @@
 @if (loading()) {
   <div class="min-h-screen bg-primary flex items-center justify-center">
-    <p class="font-sans text-content-secondary">Loading…</p>
+    <p class="text-content-secondary">Loading…</p>
   </div>
 } @else if (error()) {
   <div class="min-h-screen bg-primary flex flex-col items-center justify-center gap-4">
-    <p class="font-sans text-content-secondary">{{ error() }}</p>
-    <a
-      routerLink="/"
-      class="font-sans text-sm text-content-primary underline-offset-4 hover:underline"
+    <p class="text-content-secondary">{{ error() }}</p>
+    <a routerLink="/" class="text-sm text-content-primary underline-offset-4 hover:underline"
       >Back home</a
     >
   </div>
@@ -16,7 +14,7 @@
     <div class="mx-auto max-w-5xl">
       <a
         routerLink="/"
-        class="mb-6 inline-flex items-center gap-1 font-sans text-sm text-content-secondary hover:text-content-primary"
+        class="mb-6 inline-flex items-center gap-1 text-sm text-content-secondary hover:text-content-primary"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -45,14 +43,14 @@
         <div class="flex-1 space-y-5">
           <div class="space-y-2">
             <span
-              class="inline-block rounded bg-elevated px-2.5 py-1 font-sans text-xs font-medium text-content-secondary"
+              class="inline-block rounded bg-elevated px-2.5 py-1 text-xs font-medium text-content-secondary"
             >
               {{ book.category | categoryLabels }}
             </span>
             <h1 class="font-mono text-3xl font-bold text-content-primary lg:text-4xl">
               {{ book.title }}
             </h1>
-            <p class="font-sans text-lg text-content-secondary">by {{ book.author }}</p>
+            <p class="text-lg text-content-secondary">by {{ book.author }}</p>
           </div>
 
           <div class="flex items-center gap-4">
@@ -75,14 +73,14 @@
               </svg>
               {{ book.rating }}
             </span>
-            <span class="font-sans text-sm text-content-muted">{{ book.pages }} pages</span>
+            <span class="text-sm text-content-muted">{{ book.pages }} pages</span>
           </div>
 
           @if (book.description) {
-            <p class="font-sans leading-relaxed text-content-secondary">{{ book.description }}</p>
+            <p class="leading-relaxed text-content-secondary">{{ book.description }}</p>
           }
 
-          <dl class="grid grid-cols-2 gap-4 border-t border-border pt-5 font-sans text-sm">
+          <dl class="grid grid-cols-2 gap-4 border-t border-border pt-5 text-sm">
             <div>
               <dt class="text-content-muted">ISBN</dt>
               <dd class="text-content-primary">{{ book.isbn }}</dd>

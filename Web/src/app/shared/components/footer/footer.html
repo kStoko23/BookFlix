@@ -9,27 +9,51 @@
       </p>
     </div>
     <div class="flex justify-between gap-12 md:gap-32">
-        <div>
-          <h4 class="text-md font-medium text-content-secondary uppercase mb-3">Navigation</h4>
-          <ul class="flex flex-col gap-2">
-            <li><a routerLink="/" class="text-lg text-content-muted hover:text-content-primary transition-colors">Discover</a></li>
-            <li><a routerLink="/categories" class="text-lg text-content-muted hover:text-content-primary transition-colors">Categories</a></li>
-            <li><a routerLink="/top" class="text-lg text-content-muted hover:text-content-primary transition-colors">Top&nbsp;10</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-md font-medium text-content-secondary uppercase mb-3">Account</h4>
-          <ul class="flex flex-col gap-2">
-            <li><a routerLink="/auth/login" class="text-lg text-content-muted hover:text-content-primary transition-colors">Log&nbsp;in</a></li>
-            <li><a routerLink="/auth/register" class="text-lg text-content-muted hover:text-content-primary transition-colors">Register</a></li>
-          </ul>
-        </div>
+      <div>
+        <h4 class="text-md font-medium text-content-secondary uppercase mb-3">Navigation</h4>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              routerLink="/"
+              class="text-lg text-content-muted hover:text-content-primary transition-colors"
+              >Discover</a
+            >
+          </li>
+
+          <li>
+            <a
+              routerLink="/top"
+              class="text-lg text-content-muted hover:text-content-primary transition-colors"
+              >Top&nbsp;10</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-md font-medium text-content-secondary uppercase mb-3">Account</h4>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              routerLink="/auth/login"
+              class="text-lg text-content-muted hover:text-content-primary transition-colors"
+              >Log&nbsp;in</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/auth/register"
+              class="text-lg text-content-muted hover:text-content-primary transition-colors"
+              >Register</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="border-t border-border pt-5 flex flex-col sm:flex-row justify-between gap-4 items-center font-mono">
+  <div
+    class="border-t border-border pt-5 flex flex-col sm:flex-row justify-between gap-4 items-center font-mono"
+  >
     <p class="text-sm text-content-muted">There's no rights, it's a demo lol</p>
-    <p class="text-sm text-content-muted">
-        Built with ❤️ using Angular & .NET
-    </p>
+    <p class="text-sm text-content-muted">Built with ❤️ using Angular & .NET</p>
   </div>
 </footer>

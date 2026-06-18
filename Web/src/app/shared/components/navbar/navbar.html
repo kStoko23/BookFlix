@@ -56,7 +56,7 @@
                   ngMenuItem
                   [value]="cat.value"
                   (click)="goToCategory(cat.value)"
-                  class="cursor-pointer rounded-md px-4 py-2 font-sans text-sm text-content-secondary outline-none data-[active=true]:bg-elevated data-[active=true]:text-content-primary hover:bg-elevated hover:text-content-primary"
+                  class="cursor-pointer rounded-md px-4 py-2 text-sm text-content-secondary outline-none data-[active=true]:bg-elevated data-[active=true]:text-content-primary hover:bg-elevated hover:text-content-primary"
                 >
                   {{ cat.label }}
                 </div>
@@ -164,7 +164,7 @@
             @for (cat of categories; track cat.value) {
               <button
                 (click)="goToCategory(cat.value); closeMenu()"
-                class="rounded-md px-3 py-2 font-sans text-sm text-content-secondary hover:bg-elevated hover:text-content-primary"
+                class="rounded-md px-3 py-2 text-sm text-content-secondary hover:bg-elevated hover:text-content-primary"
               >
                 {{ cat.label }}
               </button>
