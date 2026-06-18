@@ -1,61 +1,80 @@
 <section class="min-h-screen flex items-center justify-center bg-primary px-4 py-12">
-  <form
-    [formGroup]="form"
-    (ngSubmit)="submit()"
-    class="w-full max-w-md space-y-6 rounded-xl border border-border bg-card/95 p-8 shadow-2xl shadow-black/50"
-  >
-    <div class="space-y-1.5">
-      <h1 class="font-mono text-3xl font-bold text-content-primary">Sign in</h1>
-      <p class="text-sm text-content-secondary">Welcome back.</p>
-    </div>
-
-    <div class="space-y-4">
-      <div class="space-y-1.5">
-        <input
-          formControlName="email"
-          type="email"
-          placeholder="Email"
-          class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-        />
-        @if (form.controls.email.touched && form.controls.email.invalid) {
-          <p class="text-sm text-red-400">Enter a valid email</p>
-        }
-      </div>
-
-      <div class="space-y-1.5">
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="Password"
-          class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-        />
-        @if (form.controls.password.touched && form.controls.password.invalid) {
-          <p class="text-sm text-red-400">Password is required</p>
-        }
-      </div>
-    </div>
-
-    @if (error()) {
-      <p
-        class="rounded-md bg-accent-dark/20 border border-accent-dark px-3 py-2 text-sm text-content-primary"
+  <div class="flex flex-col max-w-md w-full gap-4">
+    <a routerLink="/" class="text-content-secondary">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 inline-block"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       >
-        {{ error() }}
-      </p>
-    }
-
-    <button
-      type="submit"
-      [disabled]="loading()"
-      class="w-full rounded-md bg-accent py-3 font-semibold text-content-primary transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      Back to home
+    </a>
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="w-full space-y-6 rounded-xl border border-border bg-card/95 p-8 shadow-2xl shadow-black/50"
     >
-      {{ loading() ? 'Signing in…' : 'Sign in' }}
-    </button>
+      <div class="space-y-1.5">
+        <h1 class="font-mono text-3xl font-bold text-content-primary">Sign in</h1>
+        <p class="text-sm text-content-secondary">Welcome back.</p>
+      </div>
 
-    <p class="text-center text-sm text-content-secondary">
-      Don't have an account?
-      <a routerLink="/auth/register" class="text-content-primary underline-offset-4 hover:underline"
-        >Register</a
+      <div class="space-y-4">
+        <div class="space-y-1.5">
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="Email"
+            class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <p class="text-sm text-red-400">Enter a valid email</p>
+          }
+        </div>
+
+        <div class="space-y-1.5">
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+            class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          />
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <p class="text-sm text-red-400">Password is required</p>
+          }
+        </div>
+      </div>
+
+      @if (error()) {
+        <p
+          class="rounded-md bg-accent-dark/20 border border-accent-dark px-3 py-2 text-sm text-content-primary"
+        >
+          {{ error() }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="w-full rounded-md bg-accent py-3 font-semibold text-content-primary transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
-    </p>
-  </form>
+        {{ loading() ? 'Signing in…' : 'Sign in' }}
+      </button>
+
+      <p class="text-center text-sm text-content-secondary">
+        Don't have an account?
+        <a
+          routerLink="/auth/register"
+          class="text-content-primary underline-offset-4 hover:underline"
+          >Register</a
+        >
+      </p>
+    </form>
+  </div>
 </section>
