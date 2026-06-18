@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-6 rounded-lg border border-border bg-secondary p-5">
+  <div>
+    <h3 class="font-mono text-lg font-bold text-content-primary">Filters</h3>
+  </div>
+
+  <div class="flex md:flex-col gap-4">
+    <div class="flex flex-col gap-1.5">
+      <label class="text-md text-content-secondary">Search</label>
+      <input
+        type="text"
+        [value]="search()"
+        (input)="searchChange.emit($any($event.target).value)"
+        placeholder="Title or author"
+        class="w-full rounded-md border border-border bg-elevated px-3 py-2 text-md text-content-primary placeholder:text-content-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-md text-content-secondary">Category</label>
+      <select
+        [value]="category() ?? ''"
+        (change)="onCategoryChange($any($event.target).value)"
+        class="w-full rounded-md border border-border bg-elevated px-3 py-2 text-md text-content-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+      >
+        <option value="">All categories</option>
+        @for (cat of categories; track cat.value) {
+          <option [value]="cat.value">{{ cat.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <button
+    (click)="clear()"
+    class="text-md text-content-secondary hover:text-content-primary text-left"
+  >
+    Clear filters
+  </button>
+</div>

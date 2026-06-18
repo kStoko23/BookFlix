@@ -13,11 +13,12 @@ type ButtonVariant = 'primary' | 'outline' | 'danger';
 export class Button {
   variant = input<ButtonVariant>('primary');
   href = input<string>();
+  disabled = input<boolean>(false);
   clicked = output<void>();
 
   variantClasses() {
     const base =
-      'flex items-center gap-2 rounded-md px-5 py-2.5 text-lg font-medium transition-colors cursor-pointer';
+      'flex items-center gap-2 rounded-md px-5 py-2.5 text-lg font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed';
     const variants: Record<ButtonVariant, string> = {
       primary: 'bg-accent hover:bg-accent-hover text-white',
       outline: 'border border-border text-content-primary hover:border-border-strong',

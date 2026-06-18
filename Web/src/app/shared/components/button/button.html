@@ -5,7 +5,7 @@
     <ng-container *ngTemplateOutlet="content" />
   </a>
 } @else {
-  <button (click)="clicked.emit()" [ngClass]="variantClasses()">
+  <button (click)="clicked.emit()" [disabled]="disabled()" [ngClass]="variantClasses()">
     <ng-container *ngTemplateOutlet="content" />
   </button>
 }
