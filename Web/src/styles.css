@@ -3,7 +3,6 @@
 @import 'swiper/css';
 @import 'swiper/css/navigation';
 
-
 @theme {
   --font-sans: 'Geist', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -45,4 +44,3 @@
     background-position: -100% 0%;
   }
 }
-

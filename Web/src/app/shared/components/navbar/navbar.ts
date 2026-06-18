@@ -4,7 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Button } from '../button/button';
 import { Menu, MenuContent, MenuItem, MenuTrigger } from '@angular/aria/menu';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BookCategory, BookCategoryLabels } from '../../../core/models/book.model';
+import { BookCategory, BookCategoryLabels, categorySlug } from '../../../core/models/book.model';
 
 @Component({
   selector: 'app-navbar',
@@ -56,13 +56,11 @@ export class Navbar {
     this.authService.logout();
   }
 
-  private categorySlug(category: BookCategory): string {
-    return BookCategoryLabels[category].toLowerCase().replace(/\s+/g, '-');
-  }
-
   goToCategory(category: BookCategory) {
-    this.router.navigate(['/'], { fragment: 'category-' + this.categorySlug(category) });
+    const id = 'category-' + categorySlug(category);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     this.closeMenu();
+    history.replaceState(null, '', '/#' + id);
   }
 
   toggleMobileCategories() {

@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Book, CreateBookRequest, UpdateBookRequest, PagedResponse } from '../models/book.model';
+import {
+  Book,
+  CreateBookRequest,
+  UpdateBookRequest,
+  PagedResponse,
+  BookCategory,
+} from '../models/book.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,13 +17,20 @@ export class BookService {
   private readonly apiUrl = environment.apiUrl + '/books';
   private httpClient = inject(HttpClient);
 
-  getBooks(page?: number, pageSize?: number): Observable<PagedResponse<Book>> {
+  getBooks(
+    page?: number,
+    pageSize?: number,
+    category?: BookCategory,
+  ): Observable<PagedResponse<Book>> {
     const params: any = {};
     if (page !== undefined) {
       params.page = page;
     }
     if (pageSize !== undefined) {
       params.pageSize = pageSize;
+    }
+    if (category !== undefined) {
+      params.category = category;
     }
     return this.httpClient.get<PagedResponse<Book>>(`${this.apiUrl}`, { params });
   }

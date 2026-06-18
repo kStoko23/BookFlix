@@ -9,7 +9,7 @@ export type Book = {
   rating: number;
   createdAt: string;
   userId: number;
-}
+};
 
 export enum BookCategory {
   NonFiction = 0,
@@ -39,12 +39,16 @@ export const BookCategoryLabels: Record<BookCategory, string> = {
   [BookCategory.Other]: 'Other',
 };
 
+export function categorySlug(category: BookCategory): string {
+  return BookCategoryLabels[category].toLowerCase().replace(/\s+/g, '-');
+}
+
 export type PagedResponse<T> = {
   items: T[];
   totalCount: number;
   page: number;
   pageSize: number;
-}
+};
 
 export type CreateBookRequest = {
   title: string;
@@ -54,6 +58,6 @@ export type CreateBookRequest = {
   rating: number;
   description?: string | null;
   category: BookCategory;
-}
+};
 
 export type UpdateBookRequest = CreateBookRequest;

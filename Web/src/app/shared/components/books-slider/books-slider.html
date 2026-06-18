@@ -1,7 +1,7 @@
-@if (authService.isLoggedIn() && books().length > 0) {
-  <section class="bg-primary py-8 px-6 lg:px-14">
+@if (books().length > 0) {
+  <section [id]="sectionId()" class="bg-primary py-8 px-6 lg:px-14">
     <div class="flex items-center justify-between mb-5">
-      <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
+      <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">{{ title() }}</h2>
       <div class="flex items-center gap-4 text-content-secondary">
         <button (click)="prev()" class="w-8 h-8 cursor-pointer">
           <svg

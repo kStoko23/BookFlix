@@ -93,7 +93,7 @@
             </div>
           </dl>
 
-          @if (!canManage()) {
+          @if (canManage()) {
             <div class="flex max-lg:justify-between gap-3 pt-2">
               <app-button variant="outline"> Edit </app-button>
               <app-button variant="danger"> Delete </app-button>

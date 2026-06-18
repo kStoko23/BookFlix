@@ -2,38 +2,47 @@ import {
   Component,
   inject,
   signal,
-  OnInit,
+  input,
+  effect,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   viewChild,
+  computed,
 } from '@angular/core';
 import { BookService } from '../../../core/services/book.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { Book } from '../../../core/models/book.model';
+import { Book, BookCategory, categorySlug } from '../../../core/models/book.model';
 import { Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 
 register();
 
 @Component({
-  selector: 'app-user-books',
-  templateUrl: './user-books.html',
+  selector: 'app-books-slider',
+  templateUrl: './books-slider.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class UserBooks implements OnInit {
+export class BooksSlider {
   private bookService = inject(BookService);
-  authService = inject(AuthService);
   private router = inject(Router);
   private swiperRef = viewChild<ElementRef>('swiperRef');
 
+  category = input<BookCategory>();
+  title = input<string>('Books');
+
   books = signal<Book[]>([]);
 
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.bookService.getMyBooks(1, 20).subscribe({
+  sectionId = computed(() => {
+    const cat = this.category();
+    return cat != null ? 'category-' + categorySlug(cat) : null;
+  });
+
+  constructor() {
+    effect(() => {
+      const cat = this.category();
+      this.bookService.getBooks(1, 20, cat).subscribe({
         next: (res) => this.books.set(res.items),
       });
-    }
+    });
   }
 
   getImageUrl(book: Book): string {
