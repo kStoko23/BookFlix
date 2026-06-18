@@ -51,7 +51,7 @@ export class MyBooksPage {
         (a, b) => a.search === b.search && a.category === b.category && a.page === b.page,
       ),
       switchMap(({ search, category, page }) =>
-        this.bookService.getBooks(page, PAGE_SIZE, search, category ?? undefined).pipe(
+        this.bookService.getMyBooks(page, PAGE_SIZE, search, category ?? undefined).pipe(
           map((res) => ({
             books: res.items,
             totalCount: res.totalCount,
