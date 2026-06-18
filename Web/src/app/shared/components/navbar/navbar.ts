@@ -62,6 +62,11 @@ export class Navbar {
     this.closeMenu();
     history.replaceState(null, '', '/#' + id);
   }
+  navigateToSection(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.closeMenu();
+    history.replaceState(null, '', '/#' + id);
+  }
 
   toggleMobileCategories() {
     this.mobileCategoriesOpen.update((value) => !value);

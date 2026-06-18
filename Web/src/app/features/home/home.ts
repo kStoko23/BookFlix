@@ -21,6 +21,7 @@ export class Home {
   protected BookCategory = BookCategory;
   private bookService = inject(BookService);
   protected books = signal<Book[]>([]);
+  protected booksTop = signal<Book[]>([]);
 
   protected categories = Object.values(BookCategory)
     .filter((v): v is BookCategory => typeof v === 'number')
@@ -31,6 +32,9 @@ export class Home {
     }));
 
   ngOnInit() {
+    this.bookService.getBooks(1, 10).subscribe((response: PagedResponse<Book>) => {
+      this.booksTop.set(response.items);
+    });
     this.bookService.getBooksFromEachCategory(1, 15).subscribe((response: PagedResponse<Book>) => {
       this.books.set(response.items);
     });

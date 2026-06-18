@@ -29,6 +29,7 @@ export class BooksSlider {
   category = input<BookCategory>();
   title = input<string>('Books');
   books = input.required<Book[]>();
+  id = input<string>();
 
   filteredBooks = computed(() => {
     const cat = this.category();
@@ -37,8 +38,11 @@ export class BooksSlider {
   });
 
   sectionId = computed(() => {
+    const explicit = this.id();
+    if (explicit) return explicit; // jawny id wygrywa
+
     const cat = this.category();
-    return cat != null ? 'category-' + categorySlug(cat) : null;
+    return cat != null ? 'category-' + categorySlug(cat) : null; // fallback bez zmian
   });
 
   next() {
