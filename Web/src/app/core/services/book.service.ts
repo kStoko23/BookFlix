@@ -20,6 +20,7 @@ export class BookService {
   getBooks(
     page?: number,
     pageSize?: number,
+    search?: string,
     category?: BookCategory,
   ): Observable<PagedResponse<Book>> {
     const params: any = {};
@@ -28,6 +29,9 @@ export class BookService {
     }
     if (pageSize !== undefined) {
       params.pageSize = pageSize;
+    }
+    if (search !== undefined) {
+      params.search = search;
     }
     if (category !== undefined) {
       params.category = category;
@@ -39,7 +43,7 @@ export class BookService {
     return this.httpClient.get<Book>(`${this.apiUrl}/${id}`);
   }
 
-  getMyBooks(page?: number, pageSize?: number): Observable<PagedResponse<Book>> {
+  getMyBooks(page?: number, pageSize?: number, search?: string): Observable<PagedResponse<Book>> {
     const params: any = {};
 
     if (page !== undefined) {
@@ -47,6 +51,9 @@ export class BookService {
     }
     if (pageSize !== undefined) {
       params.pageSize = pageSize;
+    }
+    if (search !== undefined) {
+      params.search = search;
     }
 
     return this.httpClient.get<PagedResponse<Book>>(`${this.apiUrl}/mine`, { params });
