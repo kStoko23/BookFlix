@@ -12,6 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Book } from '../../../core/models/book.model';
 import { Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
+import { BookCard } from '../book-card/book-card';
 
 register();
 
@@ -19,6 +20,7 @@ register();
   selector: 'app-user-books',
   templateUrl: './user-books.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [BookCard],
 })
 export class UserBooks implements OnInit {
   private bookService = inject(BookService);
@@ -34,14 +36,6 @@ export class UserBooks implements OnInit {
         next: (res) => this.books.set(res.items),
       });
     }
-  }
-
-  getImageUrl(book: Book): string {
-    return `https://picsum.photos/seed/book${book.id}/250/450.webp`;
-  }
-
-  navigateToBook(id: number) {
-    this.router.navigate(['/books', id]);
   }
 
   next() {
