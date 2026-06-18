@@ -39,6 +39,15 @@ Accept: application/json
 GET {{host}}/api/books/480
 Accept: application/json
 
+### GET book categorized
+GET {{host}}/api/books/categorized
+Accept: application/json
+
+### GET book of logged in user
+GET {{host}}/api/books/mine
+Accept: application/json
+Authorization: Bearer {{token}}
+
 ### POST a book with correct body
 POST {{host}}/api/books
 Content-Type: application/json
