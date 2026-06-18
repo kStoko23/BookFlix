@@ -18,11 +18,11 @@ import { Button } from '../../../shared/components/button/button';
 const PAGE_SIZE = 20;
 
 @Component({
-  selector: 'app-my-books',
+  selector: 'app-my-books-page',
   imports: [BooksGrid, BookFilters, Button],
-  templateUrl: './my-books.html',
+  templateUrl: './my-books-page.html',
 })
-export class MyBooks {
+export class MyBooksPage {
   private bookService = inject(BookService);
 
   search = signal('');
