@@ -13,6 +13,7 @@ import { Book } from '../../../core/models/book.model';
 import { Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 import { BookCard } from '../book-card/book-card';
+import { Button } from '../button/button';
 
 register();
 
@@ -20,7 +21,7 @@ register();
   selector: 'app-user-books',
   templateUrl: './user-books.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [BookCard],
+  imports: [BookCard, Button],
 })
 export class UserBooks implements OnInit {
   private bookService = inject(BookService);

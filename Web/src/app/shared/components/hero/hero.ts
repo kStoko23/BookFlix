@@ -22,10 +22,10 @@ export class Hero {
 
   ngOnInit() {
     this.bookService.getBooks(1, 5).subscribe({
-      next: res => {
+      next: (res) => {
         this.books.set(res.items);
         this.startTimer();
-      }
+      },
     });
   }
 
@@ -47,8 +47,7 @@ export class Hero {
   }
 
   private startTimer() {
-    this.timer = setInterval(() =>
-      this.changeSlide(1), 8000);
+    this.timer = setInterval(() => this.changeSlide(1), 8000);
   }
 
   private stopTimer() {

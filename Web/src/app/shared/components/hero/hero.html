@@ -4,6 +4,8 @@
       class="absolute inset-0 transition-opacity duration-700 flex items-end md:items-center"
       [class.opacity-100]="currentIndex() === i"
       [class.opacity-0]="currentIndex() !== i"
+      [class.pointer-events-auto]="currentIndex() === i"
+      [class.pointer-events-none]="currentIndex() !== i"
     >
       <img
         [src]="getImageUrl(book)"
@@ -50,7 +52,7 @@
         >
           {{ book.description | descriptionLength: 150 }}
         </p>
-        <app-button variant="primary" (clicked)="navigateToBook(book.id)"> Read more </app-button>
+        <app-button variant="primary" href="/books/{{ book.id }}"> Read more </app-button>
       </div>
     </div>
   }
