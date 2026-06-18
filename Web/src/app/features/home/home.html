@@ -3,7 +3,7 @@
 
 @for (cat of categories; track cat.value) {
   @defer (on viewport) {
-    <app-books-slider [category]="cat.value" [title]="cat.label" />
+    <app-books-slider [books]="books()" [category]="cat.value" [title]="cat.label" />
   } @placeholder (minimum 200ms) {
     <div [id]="cat.slug" class="w-full h-[500px] px-14 py-8 bg-primary">
       <div
@@ -14,17 +14,4 @@
       >
     </div>
   }
-}
-
-@defer (on viewport) {
-  <app-books-slider title="All Books" />
-} @placeholder (minimum 200ms) {
-  <div class="w-full h-[500px] px-14 py-8 bg-primary">
-    <div
-      class="h-full rounded-lg bg-card border-dashed border-2 border-border flex items-center justify-center"
-    >
-      <p class="text-lg font-semibold text-content-muted">Loading...</p>
-    </div>
-    >
-  </div>
 }

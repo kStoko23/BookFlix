@@ -19,8 +19,10 @@ import { BooksSlider } from '../../shared/components/books-slider/books-slider';
 })
 export class Home {
   protected BookCategory = BookCategory;
+  private bookService = inject(BookService);
+  protected books = signal<Book[]>([]);
 
-  categories = Object.values(BookCategory)
+  protected categories = Object.values(BookCategory)
     .filter((v): v is BookCategory => typeof v === 'number')
     .map((value) => ({
       value,
@@ -28,5 +30,9 @@ export class Home {
       slug: 'category-' + categorySlug(value),
     }));
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.bookService.getBooksFromEachCategory(1, 15).subscribe((response: PagedResponse<Book>) => {
+      this.books.set(response.items);
+    });
+  }
 }

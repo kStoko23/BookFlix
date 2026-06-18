@@ -24,28 +24,22 @@ register();
   imports: [BookCard],
 })
 export class BooksSlider {
-  private bookService = inject(BookService);
-  private router = inject(Router);
   private swiperRef = viewChild<ElementRef>('swiperRef');
 
   category = input<BookCategory>();
   title = input<string>('Books');
+  books = input.required<Book[]>();
 
-  books = signal<Book[]>([]);
+  filteredBooks = computed(() => {
+    const cat = this.category();
+    const all = this.books();
+    return cat != null ? all.filter((b) => b.category === cat) : all;
+  });
 
   sectionId = computed(() => {
     const cat = this.category();
     return cat != null ? 'category-' + categorySlug(cat) : null;
   });
-
-  constructor() {
-    effect(() => {
-      const cat = this.category();
-      this.bookService.getBooks(1, 20, cat).subscribe({
-        next: (res) => this.books.set(res.items),
-      });
-    });
-  }
 
   next() {
     this.swiperRef()?.nativeElement.swiper.slideNext();
