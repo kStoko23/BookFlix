@@ -6,12 +6,14 @@ import { Login } from './features/auth/login/login';
 import { Profile } from './features/profile/profile';
 import { BookDetails } from './features/books/book-details/book-details';
 import { MyBooksPage } from './features/books/my-books-page/my-books-page';
+import { AllBooksPage } from './features/books/all-books-page/all-books-page';
 
 export const routes: Routes = [
   { path: 'auth/login', component: Login },
   { path: 'auth/register', component: Register },
   { path: 'books/:id', component: BookDetails },
   { path: 'my-list', component: MyBooksPage, canActivate: [authGuard] },
+  { path: 'discover', component: AllBooksPage, canActivate: [authGuard] },
   { path: '', component: Home },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
 ];
