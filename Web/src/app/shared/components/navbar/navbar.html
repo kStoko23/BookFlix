@@ -1,21 +1,204 @@
-<nav class="flex items-center px-6 lg:px-14 bg-primary border-b border-border py-4">
-  <a routerLink="/" class="flex items-center no-underline text-xl font-bold">
-    <span class="text-content-primary">Book</span><span class="text-accent">Flix</span>
-  </a>
+<nav class="bg-primary border-b border-border relative z-50">
+  <div class="flex items-center px-6 lg:px-14 py-4">
+    <a
+      routerLink="/"
+      (click)="closeMenu()"
+      class="flex items-center no-underline text-xl font-bold"
+    >
+      <span class="text-content-primary">Book</span><span class="text-accent">Flix</span>
+    </a>
 
-  <ul class="flex gap-8 w-full justify-center">
-    <li><a routerLink="/" routerLinkActive="active" class="nav-link">Discover</a></li>
-    <li><a routerLink="/categories" routerLinkActive="active" class="nav-link">Categories</a></li>
-    <li><a routerLink="/top" routerLinkActive="active" class="nav-link">Top&nbsp;10</a></li>
-  </ul>
+    <ul class="hidden md:flex gap-8 w-full justify-center items-center">
+      <li>
+        <a routerLink="/" routerLinkActive="active" class="nav-link">Discover</a>
+      </li>
 
-  <div class="flex items-center gap-3">
-    @if (authService.isLoggedIn()) {
-      <div class="avatar">{{ initials() }}</div>
-      <app-button (click)="authService.logout()">Logout</app-button>
-    } @else {
-      <app-button variant="outline" href="/auth/login">Log&nbsp;in</app-button>
-      <app-button variant="primary" href="/auth/register">Register</app-button>
-    }
+      <li>
+        <button
+          ngMenuTrigger
+          #origin
+          #trigger="ngMenuTrigger"
+          [menu]="categoriesMenu()"
+          class="nav-link flex items-center gap-1"
+        >
+          Categories
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 mt-1 transition-transform duration-300"
+            [class.rotate-180]="trigger.expanded()"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        <ng-template
+          [cdkConnectedOverlayOpen]="trigger.expanded()"
+          [cdkConnectedOverlay]="{ origin, usePopover: 'inline' }"
+          [cdkConnectedOverlayPositions]="[
+            { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 8 },
+          ]"
+          cdkAttachPopoverAsChild
+        >
+          <div
+            ngMenu
+            #categoriesMenu="ngMenu"
+            class="grid grid-cols-2 gap-1 rounded-lg border border-border bg-secondary p-2 shadow-2xl shadow-black/50"
+          >
+            <ng-template ngMenuContent>
+              @for (cat of categories; track cat.value) {
+                <div
+                  ngMenuItem
+                  [value]="cat.value"
+                  (click)="goToCategory(cat.value)"
+                  class="cursor-pointer rounded-md px-4 py-2 font-sans text-sm text-content-secondary outline-none data-[active=true]:bg-elevated data-[active=true]:text-content-primary hover:bg-elevated hover:text-content-primary"
+                >
+                  {{ cat.label }}
+                </div>
+              }
+            </ng-template>
+          </div>
+        </ng-template>
+      </li>
+
+      <li><a routerLink="/top" routerLinkActive="active" class="nav-link">Top&nbsp;10</a></li>
+    </ul>
+
+    <div class="hidden md:flex items-center gap-3">
+      @if (authService.isLoggedIn()) {
+        <a
+          routerLink="/profile"
+          (click)="closeMenu()"
+          class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center"
+        >
+          {{ initials() }}
+        </a>
+        <button (click)="logout()" aria-label="Logout" class="text-white w-5 h-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          </svg>
+        </button>
+      } @else {
+        <app-button variant="outline" href="/auth/login">Log&nbsp;in</app-button>
+        <app-button variant="primary" href="/auth/register">Register</app-button>
+      }
+    </div>
+
+    <button
+      (click)="toggleMenu()"
+      aria-label="Toggle menu"
+      class="md:hidden ml-auto relative z-50 flex flex-col gap-1.5 p-2"
+    >
+      <span
+        class="block h-0.5 w-6 bg-content-primary transition-transform duration-300"
+        [class.translate-y-2]="menuOpen()"
+        [class.rotate-45]="menuOpen()"
+      ></span>
+      <span
+        class="block h-0.5 w-6 bg-content-primary transition-opacity duration-300"
+        [class.opacity-0]="menuOpen()"
+      ></span>
+      <span
+        class="block h-0.5 w-6 bg-content-primary transition-transform duration-300"
+        [class.-translate-y-2]="menuOpen()"
+        [class.-rotate-45]="menuOpen()"
+      ></span>
+    </button>
   </div>
 </nav>
+
+<div
+  class="md:hidden fixed inset-0 z-40 bg-primary transition-all duration-300"
+  [class.opacity-100]="menuOpen()"
+  [class.visible]="menuOpen()"
+  [class.opacity-0]="!menuOpen()"
+  [class.invisible]="!menuOpen()"
+>
+  <div class="flex h-full flex-col items-center justify-center gap-10 px-6">
+    <ul class="flex flex-col items-center gap-8 w-full max-w-xs">
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          class="nav-link font-mono text-3xl"
+          >Discover</a
+        >
+      </li>
+
+      <li class="flex flex-col items-center w-full">
+        <button
+          (click)="toggleMobileCategories()"
+          class="nav-link font-mono text-3xl flex items-center gap-2"
+        >
+          Categories
+          <span
+            class="text-xl transition-transform duration-300"
+            [class.rotate-180]="mobileCategoriesOpen()"
+            >▾</span
+          >
+        </button>
+
+        <div
+          class="overflow-hidden transition-all duration-300 w-full"
+          [class.max-h-0]="!mobileCategoriesOpen()"
+          [class.max-h-[40rem]]="mobileCategoriesOpen()"
+        >
+          <div class="grid grid-cols-2 gap-2 pt-5 pb-2">
+            @for (cat of categories; track cat.value) {
+              <button
+                (click)="goToCategory(cat.value); closeMenu()"
+                class="rounded-md px-3 py-2 font-sans text-sm text-content-secondary hover:bg-elevated hover:text-content-primary"
+              >
+                {{ cat.label }}
+              </button>
+            }
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <a
+          routerLink="/top"
+          routerLinkActive="active"
+          (click)="closeMenu()"
+          class="nav-link font-mono text-3xl"
+          >Top&nbsp;10</a
+        >
+      </li>
+    </ul>
+
+    <div class="flex w-full max-w-xs flex-col items-center gap-4">
+      @if (authService.isLoggedIn()) {
+        <div class="flex items-center gap-3">
+          <a
+            routerLink="/profile"
+            (click)="closeMenu()"
+            class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center"
+            >{{ initials() }}</a
+          >
+        </div>
+        <app-button (click)="logout()">Logout</app-button>
+      } @else {
+        <app-button variant="outline" href="/auth/login">Log&nbsp;in</app-button>
+        <app-button variant="primary" href="/auth/register">Register</app-button>
+      }
+    </div>
+  </div>
+</div>
