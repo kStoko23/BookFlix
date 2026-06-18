@@ -12,6 +12,7 @@ public static class BooksEndpoints
     {
         var group = app.MapGroup("/api/books").WithTags("Books");
         group.MapGet("/", GetBooks);
+        group.MapGet("/categorized", GetBooksCategorized);
         group.MapGet("/{id:long}", GetBook);
         group.MapGet("/mine", GetMyBooks).RequireAuthorization();
         group.MapPost("/", CreateBook).RequireAuthorization();
@@ -87,9 +88,9 @@ public static class BooksEndpoints
         {
             query = query.Where(x => x.Category == parameters.Category.Value);
         }
-
+        
         var totalCount = await query.CountAsync();
-
+        
         var books = await query
             .OrderByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
@@ -106,6 +107,57 @@ public static class BooksEndpoints
                 Rating = x.Rating
             })
             .ToListAsync();
+
+        return Results.Ok(new
+        {
+            items = books,
+            totalCount,
+            page,
+            pageSize
+        });
+    }
+
+    private static async Task<IResult> GetBooksCategorized(BooksDbContext db, [AsParameters] BookQueryParameters parameters)
+    {
+        var page = Math.Max(parameters.Page ?? 1, 1);
+        var pageSize = Math.Clamp(parameters.PageSize ?? 15, 1, 100);
+
+        var baseQuery = db.Books.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(parameters.Search))
+        {
+            var pattern = $"%{parameters.Search.Trim()}%";
+            baseQuery = baseQuery.Where(x =>
+                EF.Functions.ILike(x.Title, pattern) ||
+                EF.Functions.ILike(x.Author, pattern));
+        }
+
+        var books = new List<BookResponse>();
+
+        foreach (var category in Enum.GetValues<BookCategory>())
+        {
+            var categoryBooks = await baseQuery
+                .Where(x => x.Category == category)
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new BookResponse
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Author = x.Author,
+                    Description = x.Description,
+                    Category = x.Category,
+                    Isbn = x.Isbn,
+                    Pages = x.Pages,
+                    Rating = x.Rating
+                })
+                .ToListAsync();
+
+            books.AddRange(categoryBooks);
+        }
+        
+        var totalCount = books.Count;
 
         return Results.Ok(new
         {
