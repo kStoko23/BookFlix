@@ -13,7 +13,7 @@ export const routes: Routes = [
   { path: 'auth/register', component: Register },
   { path: 'books/:id', component: BookDetails },
   { path: 'my-list', component: MyBooksPage, canActivate: [authGuard] },
-  { path: 'discover', component: AllBooksPage, canActivate: [authGuard] },
+  { path: 'discover', component: AllBooksPage },
   { path: '', component: Home },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
 ];
