@@ -1,19 +1,18 @@
 import {
   Component,
   inject,
-  signal,
   OnInit,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   viewChild,
+  input,
 } from '@angular/core';
-import { BookService } from '../../../core/services/book.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Book } from '../../../core/models/book.model';
-import { Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 import { BookCard } from '../book-card/book-card';
 import { Button } from '../button/button';
+import { Loader } from '../loader/loader';
 
 register();
 
@@ -21,23 +20,18 @@ register();
   selector: 'app-user-books',
   templateUrl: './user-books.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [BookCard, Button],
+  imports: [BookCard, Button, Loader],
 })
 export class UserBooks implements OnInit {
-  private bookService = inject(BookService);
   authService = inject(AuthService);
-  private router = inject(Router);
   private swiperRef = viewChild<ElementRef>('swiperRef');
 
-  books = signal<Book[]>([]);
+  books = input.required<Book[]>();
+  isLoggedIn = input.required<boolean>();
+  loading = input.required<boolean>();
+  error = input.required<boolean>();
 
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.bookService.getMyBooks(1, 20).subscribe({
-        next: (res) => this.books.set(res.items),
-      });
-    }
-  }
+  ngOnInit() {}
 
   next() {
     this.swiperRef()?.nativeElement.swiper.slideNext();

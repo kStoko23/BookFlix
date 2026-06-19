@@ -1,4 +1,4 @@
-@if (authService.isLoggedIn() && books().length > 0) {
+@if (isLoggedIn() && books().length > 0 && !loading()) {
   <section class="bg-primary py-8 px-6 lg:px-14">
     <div class="flex items-center justify-between mb-5">
       <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
@@ -40,7 +40,7 @@
         breakpoints='{"480": {"slidesPerView": 2}, "640": {"slidesPerView": 3}, "768": {"slidesPerView": 4}, "1280": {"slidesPerView": 5}, "1536": {"slidesPerView": 6}, "1920": {"slidesPerView": 8}}'
       >
         @for (book of books(); track book.id) {
-          <swiper-slide>
+          <swiper-slide class="h-[450px]">
             <app-book-card [book]="book" />
           </swiper-slide>
         }
@@ -48,6 +48,47 @@
     </div>
     <div class="flex justify-center mt-5">
       <app-button href="/my-list">See All</app-button>
+    </div>
+  </section>
+} @else if (isLoggedIn() && loading()) {
+  <section class="bg-primary py-8 px-6 lg:px-14">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
+    </div>
+
+    <div class="relative">
+      <swiper-container
+        #swiperRef
+        slides-per-view="1"
+        space-between="20"
+        breakpoints='{"480": {"slidesPerView": 2}, "640": {"slidesPerView": 3}, "768": {"slidesPerView": 4}, "1280": {"slidesPerView": 5}, "1536": {"slidesPerView": 6}, "1920": {"slidesPerView": 8}}'
+      >
+        @for (n of [1, 2, 3, 4, 5, 6]; track n) {
+          <swiper-slide class="h-[450px]">
+            <app-loader message="Loading your books..."></app-loader>
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+  </section>
+} @else if (isLoggedIn() && error()) {
+  <section class="bg-primary py-8 px-6 lg:px-14">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
+    </div>
+
+    <div class="h-[450px]">
+      <app-loader message="Error loading books."></app-loader>
+    </div>
+  </section>
+} @else if (books().length <= 0) {
+  <section class="bg-primary py-8 px-6 lg:px-14">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary">My List</h2>
+    </div>
+
+    <div class="h-[450px]">
+      <app-loader message="Your list is empty."></app-loader>
     </div>
   </section>
 }

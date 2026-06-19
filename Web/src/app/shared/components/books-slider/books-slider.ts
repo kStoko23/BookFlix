@@ -1,19 +1,15 @@
 import {
   Component,
-  inject,
-  signal,
   input,
-  effect,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   viewChild,
   computed,
 } from '@angular/core';
-import { BookService } from '../../../core/services/book.service';
-import { Book, BookCategory, categorySlug } from '../../../core/models/book.model';
-import { Router } from '@angular/router';
+import { Book, BookCategory } from '../../../core/models/book.model';
 import { register } from 'swiper/element/bundle';
 import { BookCard } from '../book-card/book-card';
+import { Loader } from '../loader/loader';
 
 register();
 
@@ -21,15 +17,17 @@ register();
   selector: 'app-books-slider',
   templateUrl: './books-slider.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [BookCard],
+  imports: [BookCard, Loader],
 })
 export class BooksSlider {
   private swiperRef = viewChild<ElementRef>('swiperRef');
 
   category = input<BookCategory>();
   title = input<string>('Books');
-  books = input.required<Book[]>();
   id = input<string>();
+  books = input.required<Book[]>();
+  loading = input<boolean>(true);
+  error = input.required<boolean>();
 
   filteredBooks = computed(() => {
     const cat = this.category();
@@ -39,10 +37,10 @@ export class BooksSlider {
 
   sectionId = computed(() => {
     const explicit = this.id();
-    if (explicit) return explicit; // jawny id wygrywa
+    if (explicit) return explicit;
 
     const cat = this.category();
-    return cat != null ? 'category-' + categorySlug(cat) : null; // fallback bez zmian
+    return cat != null ? 'category-' + cat : null;
   });
 
   next() {

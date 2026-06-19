@@ -1,11 +1,11 @@
 <div
   (click)="navigateToBook(book().id)"
-  class="relative w-full bg-card rounded-md overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-105 group"
+  class="relative w-full h-full bg-card rounded-md overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-105 group"
 >
   <img
     [src]="getImageUrl(book())"
     [alt]="book().title"
-    class="w-full h-[450px] object-cover object-center"
+    class="w-full h-full object-cover object-center"
     loading="lazy"
     decoding="async"
   />

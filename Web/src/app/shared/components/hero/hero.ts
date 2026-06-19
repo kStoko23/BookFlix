@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { BookService } from '../../../core/services/book.service';
 import { Router } from '@angular/router';
 import { Book } from '../../../core/models/book.model';
@@ -13,21 +13,13 @@ import { DescriptionLengthPipe } from '../../pipes/description-length.pipe';
   styleUrl: './hero.css',
 })
 export class Hero {
-  private bookService = inject(BookService);
   private router = inject(Router);
 
-  books = signal<Book[]>([]);
+  books = input.required<Book[]>();
   currentIndex = signal<number>(0);
   private timer?: ReturnType<typeof setInterval>;
 
-  ngOnInit() {
-    this.bookService.getBooks(1, 5).subscribe({
-      next: (res) => {
-        this.books.set(res.items);
-        this.startTimer();
-      },
-    });
-  }
+  ngOnInit() {}
 
   getImageUrl(book: Book): string {
     return `https://picsum.photos/seed/book${book.id}/1600/1000.webp`;
