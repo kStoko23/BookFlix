@@ -58,14 +58,21 @@ export class Navbar {
 
   goToCategory(category: BookCategory) {
     const id = 'category-' + categorySlug(category);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     this.closeMenu();
-    history.replaceState(null, '', '/#' + id);
+    this.router.navigate(['/'], { fragment: id }).then(() => {
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    });
   }
+
   navigateToSection(id: string) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     this.closeMenu();
-    history.replaceState(null, '', '/#' + id);
+    this.router.navigate(['/'], { fragment: id }).then(() => {
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    });
   }
 
   toggleMobileCategories() {

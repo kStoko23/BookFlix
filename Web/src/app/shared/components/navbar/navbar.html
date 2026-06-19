@@ -67,7 +67,7 @@
       </li>
 
       <li>
-        <a (click)="navigateToSection('top-10')" class="nav-link">Top&nbsp;10</a>
+        <a routerLink="/my-list" class="nav-link">My Books</a>
       </li>
     </ul>
 
@@ -177,11 +177,11 @@
 
       <li>
         <a
-          routerLink="#top-10"
+          routerLink="/my-list"
           routerLinkActive="active"
           (click)="closeMenu()"
           class="nav-link font-mono text-3xl"
-          >Top&nbsp;10</a
+          >My Books</a
         >
       </li>
     </ul>

@@ -6,7 +6,7 @@ import {
   viewChild,
   computed,
 } from '@angular/core';
-import { Book, BookCategory } from '../../../core/models/book.model';
+import { Book, BookCategory, categorySlug } from '../../../core/models/book.model';
 import { register } from 'swiper/element/bundle';
 import { BookCard } from '../book-card/book-card';
 import { Loader } from '../loader/loader';
@@ -38,9 +38,8 @@ export class BooksSlider {
   sectionId = computed(() => {
     const explicit = this.id();
     if (explicit) return explicit;
-
     const cat = this.category();
-    return cat != null ? 'category-' + cat : null;
+    return cat != null ? 'category-' + categorySlug(cat) : null;
   });
 
   next() {
