@@ -24,9 +24,12 @@ import { BookCategory, BookCategoryLabels, categorySlug } from '../../../core/mo
 export class Navbar {
   authService = inject(AuthService);
   private router = inject(Router);
-  menuOpen = signal(false);
+
   categoriesMenu = viewChild<Menu<BookCategory>>('categoriesMenu');
-  mobileCategoriesOpen = signal(false);
+
+  protected menuOpen = signal(false);
+  protected mobileCategoriesOpen = signal(false);
+  protected isLoggedIn = signal(this.authService.isLoggedIn());
 
   categories = Object.values(BookCategory)
     .filter((v): v is BookCategory => typeof v === 'number')

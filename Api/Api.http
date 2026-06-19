@@ -5,9 +5,9 @@ POST {{host}}/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "test@test.com",
-  "password": "test",
-  "username": "test"
+  "email": "admin@admin.com",
+  "password": "admin",
+  "username": "admin"
 }
 
 ### POST login
@@ -15,8 +15,8 @@ POST {{host}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@test.com",
-  "password": "test"
+  "email": "admin@admin.com",
+  "password": "admin123"
 }
 
 > {%
