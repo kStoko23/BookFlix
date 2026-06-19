@@ -94,9 +94,18 @@
           @if (canManage()) {
             <div class="flex max-lg:justify-between gap-3 pt-2">
               <app-button variant="outline"> Edit </app-button>
-              <app-button variant="danger"> Delete </app-button>
+              <app-button (click)="openDeleteDialog()" variant="danger"> Delete </app-button>
             </div>
           }
+          <app-dialog
+            [visible]="deleteDialogOpen()"
+            [title]="'Delete Book'"
+            [message]="'Are you sure you want to delete this book?'"
+            [cancelLabel]="'Cancel'"
+            [confirmLabel]="'Delete'"
+            (cancelled)="cancelDelete()"
+            (confirmed)="confirmDelete()"
+          ></app-dialog>
         </div>
       </div>
     </div>
