@@ -35,7 +35,7 @@ public static class BooksEndpoints
                 EF.Functions.ILike(x.Title, pattern) ||
                 EF.Functions.ILike(x.Author, pattern));
         }
-        
+
         if (parameters.Category.HasValue)
         {
             query = query.Where(x => x.Category == parameters.Category.Value);
@@ -83,14 +83,14 @@ public static class BooksEndpoints
                 EF.Functions.ILike(x.Title, pattern) ||
                 EF.Functions.ILike(x.Author, pattern));
         }
-        
+
         if (parameters.Category.HasValue)
         {
             query = query.Where(x => x.Category == parameters.Category.Value);
         }
-        
+
         var totalCount = await query.CountAsync();
-        
+
         var books = await query
             .OrderByDescending(x => x.CreatedAt)
             .Skip((page - 1) * pageSize)
@@ -156,7 +156,7 @@ public static class BooksEndpoints
 
             books.AddRange(categoryBooks);
         }
-        
+
         var totalCount = books.Count;
 
         return Results.Ok(new
@@ -181,7 +181,8 @@ public static class BooksEndpoints
                 Category = x.Category,
                 Isbn = x.Isbn,
                 Pages = x.Pages,
-                Rating = x.Rating
+                Rating = x.Rating,
+                UserId = x.UserId
             })
             .FirstOrDefaultAsync();
 
@@ -259,7 +260,7 @@ public static class BooksEndpoints
         var book = await db.Books.FindAsync(id);
         if (book == null) return Results.NotFound();
         if(book.UserId != userId) return Results.Forbid();
-        
+
         book.Title = request.Title.Trim();
         book.Author = request.Author.Trim();
         book.Description = request.Description.Trim();
@@ -267,7 +268,7 @@ public static class BooksEndpoints
         book.Isbn = request.Isbn.Trim();
         book.Pages = request.Pages;
         book.Rating = request.Rating;
-        
+
         await db.SaveChangesAsync();
 
         return Results.NoContent();
@@ -275,7 +276,7 @@ public static class BooksEndpoints
     private static Dictionary<string, string[]> ValidateUpdateBookRequest(UpdateBookRequest request)
     {
         var errors = new Dictionary<string, string[]>();
-        
+
         if (string.IsNullOrWhiteSpace(request.Title))
             errors["title"] = ["Title is required"];
         if (string.IsNullOrWhiteSpace(request.Author))
@@ -299,7 +300,7 @@ public static class BooksEndpoints
         var book = await db.Books.FindAsync(id);
         if (book == null) return Results.NotFound();
         if(book.UserId != userId) return Results.Forbid();
-        
+
         db.Books.Remove(book);
         await db.SaveChangesAsync();
         return Results.NoContent();

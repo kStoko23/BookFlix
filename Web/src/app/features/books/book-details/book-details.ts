@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BookService } from '../../../core/services/book.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Book } from '../../../core/models/book.model';
@@ -14,7 +14,6 @@ import { Button } from '../../../shared/components/button/button';
 })
 export class BookDetails implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private bookService = inject(BookService);
   private authService = inject(AuthService);
 
