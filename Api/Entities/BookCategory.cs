@@ -2,6 +2,7 @@
 
 public enum BookCategory
 {
+    Other = 0,
     NonFiction,
     Fiction,
     Fantasy,
@@ -11,6 +12,5 @@ public enum BookCategory
     Romance,
     Biography,
     History,
-    Educational,
-    Other,
+    Educational
 }
