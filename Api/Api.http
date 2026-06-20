@@ -1,54 +1,414 @@
 @host = http://localhost:8080
 
-### POST register account
+###############################################
+# AUTH - REGISTER
+###############################################
+
+### REGISTER - valid request
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - email empty
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - email missing @
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "notanemail.com",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - email missing domain
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - email already taken (run twice with same body)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "duplicate@test.com",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - email already taken (second call, expect 409)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "duplicate@test.com",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - username empty
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": ""
+}
+
+### REGISTER - username too short (2 chars)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(2)}}"
+}
+
+### REGISTER - username too long (101 chars)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": "{{$random.alphabetic(101)}}"
+}
+
+### REGISTER - username with special characters
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": "admin!@#$"
+}
+
+### REGISTER - username with spaces
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234",
+  "username": "admin user"
+}
+
+### REGISTER - password empty
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - password too short (< 8 chars)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Ab1",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - password too long (> 64 chars)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Aa1{{$random.alphabetic(65)}}",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - password without uppercase letter
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "admin1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - password without lowercase letter
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "ADMIN1234",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - password without digit
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "AdminAdmin",
+  "username": "{{$random.alphabetic(8)}}"
+}
+
+### REGISTER - multiple errors at once
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "bad-email",
+  "password": "weak",
+  "username": "a"
+}
+
+
+###############################################
+# AUTH - LOGIN
+###############################################
+
+### REGISTER - account used for login tests below
 POST {{host}}/api/auth/register
 Content-Type: application/json
 
 {
   "email": "admin@admin.com",
-  "password": "admin",
+  "password": "Admin1234",
   "username": "admin"
 }
 
-### POST login
+### LOGIN - valid credentials
 POST {{host}}/api/auth/login
 Content-Type: application/json
 
 {
   "email": "admin@admin.com",
-  "password": "admin123"
+  "password": "Admin1234"
 }
 
 > {%
     client.global.set("token", response.body.token);
 %}
 
-### GET all books
+### LOGIN - nonexistent email
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}",
+  "password": "Admin1234"
+}
+
+### LOGIN - wrong password
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "WrongPassword1"
+}
+
+### LOGIN - empty email
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": "Admin1234"
+}
+
+### LOGIN - empty password
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": ""
+}
+
+
+###############################################
+# AUTH - SECOND ACCOUNT (for ownership / 403 tests)
+###############################################
+
+### REGISTER - second account
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "second@second.com",
+  "password": "Second1234",
+  "username": "seconduser"
+}
+
+### LOGIN - second account
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "second@second.com",
+  "password": "Second1234"
+}
+
+> {%
+    client.global.set("token2", response.body.token);
+%}
+
+
+###############################################
+# GET BOOKS - list / search / pagination
+###############################################
+
+### GET all books - default pagination
 GET {{host}}/api/books
 Accept: application/json
 
-### GET all books with pagination
-GET {{host}}/api/books?page=2&pageSize=12
+### GET all books - page 0 (should clamp to 1)
+GET {{host}}/api/books?page=0
 Accept: application/json
 
-### GET book via search
-GET {{host}}/api/books?search=Akilah Balistreri
+### GET all books - negative page (should clamp to 1)
+GET {{host}}/api/books?page=-5
 Accept: application/json
 
-### GET book by ID
-GET {{host}}/api/books/480
+### GET all books - very high page (expect empty items)
+GET {{host}}/api/books?page=99999
 Accept: application/json
 
-### GET book categorized
+### GET all books - pageSize 0 (should clamp to 1)
+GET {{host}}/api/books?pageSize=0
+Accept: application/json
+
+### GET all books - pageSize above max (should clamp to 100)
+GET {{host}}/api/books?pageSize=500
+Accept: application/json
+
+### GET all books - search with no matches
+GET {{host}}/api/books?search={{$random.alphabetic(20)}}
+Accept: application/json
+
+### GET all books - search with SQL injection attempt
+GET {{host}}/api/books?search='; DROP TABLE Books;--
+Accept: application/json
+
+### GET all books - filter by valid category
+GET {{host}}/api/books?category=Fantasy
+Accept: application/json
+
+### GET all books - filter by invalid category value
+GET {{host}}/api/books?category=NotARealCategory
+Accept: application/json
+
+
+###############################################
+# GET BOOK BY ID
+###############################################
+
+### GET book by ID - nonexistent ID
+GET {{host}}/api/books/999999
+Accept: application/json
+
+### GET book by ID - negative ID
+GET {{host}}/api/books/-1
+Accept: application/json
+
+### GET book by ID - non-numeric ID (expect 404 from routing)
+GET {{host}}/api/books/abc
+Accept: application/json
+
+
+###############################################
+# GET BOOKS CATEGORIZED
+###############################################
+
+### GET books categorized - default
 GET {{host}}/api/books/categorized
 Accept: application/json
 
-### GET book of logged in user
+### GET books categorized - custom pageSize
+GET {{host}}/api/books/categorized?pageSize=5
+Accept: application/json
+
+
+###############################################
+# GET MY BOOKS
+###############################################
+
+### GET my books - without token (expect 401)
+GET {{host}}/api/books/mine
+Accept: application/json
+
+### GET my books - with valid token (likely empty for fresh account)
 GET {{host}}/api/books/mine
 Accept: application/json
 Authorization: Bearer {{token}}
 
-### POST a book with correct body
+### GET my books - with invalid token
+GET {{host}}/api/books/mine
+Accept: application/json
+Authorization: Bearer invalid_token
+
+
+###############################################
+# POST BOOK (CreateBook)
+###############################################
+
+### POST book - valid, full payload
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "description": "{{$random.alphabetic(50)}}",
+  "category": {{$random.integer(0,12)}},
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+> {%
+    client.global.set("createdBookId", response.body.id);
+%}
+
+### POST book - valid, no description (expect default/null handling)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "description": "",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - valid, no category (expect default Other)
 POST {{host}}/api/books
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -61,7 +421,7 @@ Authorization: Bearer {{token}}
   "rating": {{$random.integer(1, 5)}}
 }
 
-### POST a book with missing field
+### POST book - title empty
 POST {{host}}/api/books
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -74,7 +434,218 @@ Authorization: Bearer {{token}}
   "rating": {{$random.integer(1, 5)}}
 }
 
-### POST a book without authorization
+### POST book - title too long (301 chars)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.alphabetic(301)}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - author empty
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - author too long (201 chars)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.alphabetic(201)}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - description too long (1201 chars)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "description": "{{$random.alphabetic(1201)}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+### POST book - no description
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "description": "",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+
+### POST book - invalid category value
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "category": 999,
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - ISBN empty
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - ISBN invalid format
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.numeric(3)}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - ISBN duplicate
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "9780306406",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - pages zero
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": 0,
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - pages negative
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": -10,
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - pages too large (> 10000)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": 10001,
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### POST book - rating zero
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": 0
+}
+
+### POST book - rating above 5
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": 6
+}
+
+### POST book - rating negative
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": -1
+}
+
+### POST book - multiple errors at once
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "",
+  "author": "",
+  "isbn": "123",
+  "pages": -5,
+  "rating": 10
+}
+
+### POST book - without authorization
 POST {{host}}/api/books
 Content-Type: application/json
 
@@ -86,7 +657,7 @@ Content-Type: application/json
   "rating": {{$random.integer(1, 5)}}
 }
 
-### POST a book with invalid token
+### POST book - with invalid token
 POST {{host}}/api/books
 Content-Type: application/json
 Authorization: Bearer bad_token
@@ -99,81 +670,162 @@ Authorization: Bearer bad_token
   "rating": {{$random.integer(1, 5)}}
 }
 
-### PUT change book 
-PUT {{host}}/api/books/7
+
+###############################################
+# PUT BOOK (PutBook)
+###############################################
+
+### PUT book - valid update on own book
+PUT {{host}}/api/books/{{createdBookId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "title": "{{$random.book.title}}",
-  "author": "Akilah Balistreri",
-  "isbn": "0924170093",
-  "pages": 2112,
-  "rating": 4
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
 }
+### GET updated book 
+GET {{host}}/api/books/{{createdBookId}}
+Content-Type: application/json
 
-### PUT change book with invalid ID
-PUT {{host}}/api/books/472
+### PUT book - nonexistent ID
+PUT {{host}}/api/books/999999
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "title": "{{$random.book.title}}",
-  "author": "Lorean Shields",
-  "isbn": "1937207730",
-  "pages": 2026,
-  "rating": 4
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
 }
 
-### PUT change book with missing field
-PUT {{host}}/api/books/7
+### PUT book - belongs to another user (expect 403)
+PUT {{host}}/api/books/{{createdBookId}}
+Content-Type: application/json
+Authorization: Bearer {{token2}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### PUT book - title empty
+PUT {{host}}/api/books/{{createdBookId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "title": "",
-  "author": "Lorean Shields",
-  "isbn": "1937207730",
-  "pages": 2026,
-  "rating": 4
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
 }
 
-### PUT change book with invalid token
-PUT {{host}}/api/books/7
+### PUT book - invalid ISBN format
+PUT {{host}}/api/books/{{createdBookId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.numeric(4)}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### PUT book - rating out of range
+PUT {{host}}/api/books/{{createdBookId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": 7
+}
+
+### PUT book - without token
+PUT {{host}}/api/books/{{createdBookId}}
+Content-Type: application/json
+
+{
+  "title": "{{$random.book.title}}",
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
+}
+
+### PUT book - invalid token
+PUT {{host}}/api/books/{{createdBookId}}
 Content-Type: application/json
 Authorization: Bearer invalid_token
 
 {
   "title": "{{$random.book.title}}",
-  "author": "Lorean Shields",
-  "isbn": "1937207730",
-  "pages": 2026,
-  "rating": 4
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
 }
 
-### PUT change book without token
-PUT {{host}}/api/books/7
+
+###############################################
+# DELETE BOOK
+###############################################
+
+### POST book - create a throwaway book to delete
+POST {{host}}/api/books
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "title": "{{$random.book.title}}",
-  "author": "Lorean Shields",
-  "isbn": "1937207730",
-  "pages": 2026,
-  "rating": 4
+  "author": "{{$random.name.fullName}}",
+  "isbn": "{{$random.code.isbn10}}",
+  "pages": {{$random.integer(5, 2500)}},
+  "rating": {{$random.integer(1, 5)}}
 }
 
-### DELETE book 
-DELETE {{host}}/api/books/7
-Authorization: Bearer {{token}}
+> {%
+    client.global.set("deletableBookId", response.body.id);
+%}
 
-### DELETE book with invalid ID
-DELETE {{host}}/api/books/734
-Authorization: Bearer {{token}}
+### GET check if deleted
+GET  {{host}}/api/books/{{deletableBookId}}
+Content-Type: application/json
 
-### DELETE book with invalid token
-DELETE {{host}}/api/books/7
+### DELETE book - belongs to another user (expect 403)
+DELETE {{host}}/api/books/{{deletableBookId}}
+Authorization: Bearer {{token2}}
+
+### DELETE book - without token
+DELETE {{host}}/api/books/{{deletableBookId}}
+
+### DELETE book - invalid token
+DELETE {{host}}/api/books/{{deletableBookId}}
 Authorization: Bearer invalid_token
 
-### DELETE book without token 
-DELETE {{host}}/api/books/7
+### DELETE book - nonexistent ID
+DELETE {{host}}/api/books/999999
+Authorization: Bearer {{token}}
+
+### DELETE book - valid (own book)
+DELETE {{host}}/api/books/{{deletableBookId}}
+Authorization: Bearer {{token}}
+
+### DELETE book - same book again (expect 404, already deleted)
+DELETE {{host}}/api/books/{{deletableBookId}}
+Authorization: Bearer {{token}}
