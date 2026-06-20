@@ -33,7 +33,7 @@ public class BookConfiguration: IEntityTypeConfiguration<Book>
                 .IsRequired();
         builder.Property(x => x.Isbn)
                 .HasColumnName("Isbn")
-                .HasMaxLength(10)
+                .HasMaxLength(13)
                 .IsRequired();
         builder.Property(x => x.Pages)
                 .HasColumnName("Pages")
@@ -53,6 +53,7 @@ public class BookConfiguration: IEntityTypeConfiguration<Book>
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasIndex(x => x.Isbn).IsUnique();
+        builder.HasIndex(x => x.Category);
+        builder.HasIndex(x => x.UserId);
     }
 }
