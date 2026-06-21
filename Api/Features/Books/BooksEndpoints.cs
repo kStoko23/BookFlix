@@ -14,7 +14,7 @@ public static class BooksEndpoints
     public static void MapBooksEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/books").WithTags("Books").RequireRateLimiting("fixed");
-        
+
         group.MapGet("/", GetBooks);
         group.MapGet("/categorized", GetBooksCategorized);
         group.MapGet("/{id:long}", GetBook);
@@ -71,7 +71,7 @@ public static class BooksEndpoints
             pageSize
         });
     }
-    
+
     private static async Task<IResult> GetMyBooks(BooksDbContext db, [AsParameters] BookQueryParameters parameters, ClaimsPrincipal user)
     {
         var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -199,13 +199,14 @@ public static class BooksEndpoints
     {
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
+        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (errors.Count > 0)
         {
             return Results.ValidationProblem(errors);
         }
-        if (await db.Books.AnyAsync(x => x.Isbn == request.Isbn))
+        if (await db.Books.AnyAsync(x => x.Isbn == cleanedIsbn))
             return Results.Conflict(new { message = "Duplicate ISBN number" });
-        
+
         var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var book = new Book()
         {
@@ -213,7 +214,7 @@ public static class BooksEndpoints
             Author = request.Author.Trim(),
             Description = request.Description?.Trim(),
             Category =  request.Category ?? BookCategory.Other,
-            Isbn = request.Isbn.Trim(),
+            Isbn = cleanedIsbn,
             Pages = request.Pages,
             Rating = request.Rating,
             UserId = userId
@@ -241,6 +242,7 @@ public static class BooksEndpoints
     {
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
+        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (errors.Count > 0)
         {
             return Results.ValidationProblem(errors);
@@ -250,11 +252,14 @@ public static class BooksEndpoints
         if (book == null) return Results.NotFound();
         if(book.UserId != userId) return Results.Forbid();
 
+        if (await db.Books.AnyAsync(x => x.Isbn == cleanedIsbn && x.Id != id))
+            return Results.Conflict(new { message = "Duplicate ISBN number" });
+
         book.Title = request.Title.Trim();
         book.Author = request.Author.Trim();
         book.Description = request.Description?.Trim();
         book.Category = request.Category ?? BookCategory.Other;
-        book.Isbn = request.Isbn.Trim();
+        book.Isbn = cleanedIsbn;
         book.Pages = request.Pages;
         book.Rating = request.Rating;
 

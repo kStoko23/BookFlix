@@ -78,6 +78,8 @@
 
           @if (book.description) {
             <p class="leading-relaxed text-content-secondary">{{ book.description }}</p>
+          } @else {
+            <p class="leading-relaxed text-content-secondary">No description provided.</p>
           }
 
           <dl class="grid grid-cols-2 gap-4 border-t border-border pt-5 text-sm">
@@ -93,7 +95,7 @@
 
           @if (canManage()) {
             <div class="flex max-lg:justify-between gap-3 pt-2">
-              <app-button variant="outline"> Edit </app-button>
+              <app-button variant="outline" href="/books/{{ book.id }}/edit">Edit</app-button>
               <app-button (click)="openDeleteDialog()" variant="danger"> Delete </app-button>
             </div>
           }

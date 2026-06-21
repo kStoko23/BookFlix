@@ -7,13 +7,19 @@ import { Profile } from './features/profile/profile';
 import { BookDetails } from './features/books/book-details/book-details';
 import { MyBooksPage } from './features/books/my-books-page/my-books-page';
 import { AllBooksPage } from './features/books/all-books-page/all-books-page';
+import { BookForm } from './features/books/book-form/book-form';
 
 export const routes: Routes = [
   { path: 'auth/login', component: Login },
   { path: 'auth/register', component: Register },
-  { path: 'books/:id', component: BookDetails },
+
   { path: 'my-list', component: MyBooksPage, canActivate: [authGuard] },
   { path: 'discover', component: AllBooksPage },
-  { path: '', component: Home },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
+
+  { path: 'books/new', component: BookForm, canActivate: [authGuard] },
+  { path: 'books/:id/edit', component: BookForm, canActivate: [authGuard] },
+  { path: 'books/:id', component: BookDetails },
+
+  { path: '', component: Home },
 ];

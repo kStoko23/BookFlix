@@ -50,7 +50,11 @@
         <p
           class="text-content-secondary text-sm sm:text-base md:text-lg 2xl:text-2xl mb-1 line-clamp-3 md:line-clamp-none"
         >
-          {{ book.description | descriptionLength: 150 }}
+          @if (book.description) {
+            {{ book.description | descriptionLength: 150 }}
+          } @else {
+            No description provided.
+          }
         </p>
         <app-button variant="primary" href="/books/{{ book.id }}"> Read more </app-button>
       </div>

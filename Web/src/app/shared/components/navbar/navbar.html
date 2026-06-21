@@ -69,6 +69,9 @@
         <li>
           <a routerLink="/my-list" class="nav-link">My Books</a>
         </li>
+        <li>
+          <app-button variant="primary" href="/books/new">Add book</app-button>
+        </li>
       }
     </ul>
 
@@ -185,6 +188,9 @@
             >My Books</a
           >
         </li>
+        <li>
+          <app-button variant="primary" href="/books/new">Add book</app-button>
+        </li>
       }
     </ul>
 
@@ -198,7 +204,21 @@
             >{{ initials() }}</a
           >
         </div>
-        <app-button (click)="logout()">Logout</app-button>
+        <button (click)="logout()" aria-label="Logout" class="text-white w-5 h-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          </svg>
+        </button>
       } @else {
         <app-button variant="outline" href="/auth/login">Log&nbsp;in</app-button>
         <app-button variant="primary" href="/auth/register">Register</app-button>

@@ -15,6 +15,7 @@ export class Button {
   href = input<string>();
   disabled = input<boolean>(false);
   clicked = output<void>();
+  type = input<'button' | 'submit'>('button');
 
   variantClasses() {
     const base =
