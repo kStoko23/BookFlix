@@ -9,6 +9,19 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
+const USERNAME_REGEX = /^[a-zA-Z0-9_]+$/;
+
+// password needs 1 uppercase, 1 lowercase, and 1 digit
+function passwordStrength(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as string;
+  if (!value) return null;
+  const errors: ValidationErrors = {};
+  if (!/[A-Z]/.test(value)) errors['noUpper'] = true;
+  if (!/[a-z]/.test(value)) errors['noLower'] = true;
+  if (!/\d/.test(value)) errors['noDigit'] = true;
+  return Object.keys(errors).length ? errors : null;
+}
+
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, RouterLink],
@@ -24,16 +37,26 @@ export class Register {
 
   form = this.fb.nonNullable.group(
     {
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(100),
+          Validators.pattern(USERNAME_REGEX),
+        ],
+      ],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(8), Validators.maxLength(64), passwordStrength],
+      ],
       confirmPassword: ['', [Validators.required]],
     },
     { validators: passwordsMatch },
   );
 
   submit() {
-    console.log('invalid?', this.form.invalid, 'errors:', this.form.errors, this.form.value);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -52,7 +75,6 @@ export class Register {
   }
 }
 
-// cross-field validator: hasła muszą się zgadzać
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const pass = group.get('password')?.value;
   const confirm = group.get('confirmPassword')?.value;

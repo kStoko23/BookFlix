@@ -32,12 +32,16 @@
             placeholder="Username"
             class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
-          @if (form.controls.username.touched && form.controls.username.errors) {
+          @if (form.controls.username.touched && form.controls.username.errors; as e) {
             <p class="text-sm text-red-400">
-              @if (form.controls.username.errors['required']) {
+              @if (e['required']) {
                 Username is required
-              } @else if (form.controls.username.errors['minlength']) {
+              } @else if (e['minlength']) {
                 At least 3 characters
+              } @else if (e['maxlength']) {
+                At most 100 characters
+              } @else if (e['pattern']) {
+                Only letters, digits and underscores
               }
             </p>
           }
@@ -62,12 +66,20 @@
             placeholder="Password"
             class="w-full rounded-md border border-border bg-elevated px-4 py-3 text-content-primary placeholder:text-content-muted transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
-          @if (form.controls.password.touched && form.controls.password.errors) {
+          @if (form.controls.password.touched && form.controls.password.errors; as e) {
             <p class="text-sm text-red-400">
-              @if (form.controls.password.errors['required']) {
+              @if (e['required']) {
                 Password is required
-              } @else if (form.controls.password.errors['minlength']) {
-                At least 6 characters
+              } @else if (e['minlength']) {
+                At least 8 characters
+              } @else if (e['maxlength']) {
+                At most 64 characters
+              } @else if (e['noUpper']) {
+                Must contain an uppercase letter
+              } @else if (e['noLower']) {
+                Must contain a lowercase letter
+              } @else if (e['noDigit']) {
+                Must contain a digit
               }
             </p>
           }
