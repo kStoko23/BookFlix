@@ -1,6 +1,10 @@
 # BookFlix
 
-A full-stack demo application, a book library in style of Netflix. Built for learning purposes, demonstrating JWT authentication, RESTful CRUD APIs, and a modern SPA frontend.
+A full-stack demo application, a book library in style of Netflix. Built for learning purposes, demonstrating JWT authentication, RESTful CRUD APIs, and a modern SPA frontend. I wanted to learn fullstack development and decided on Angular & .NET. Used both of them at Uni and enjoyed working with them for no particular reasons, I guess that's because they were my first technologies used so that's probably why. 
+
+I tried to not use AI first, but develop as much as I can by myself (again to learn that stuff better), but there were situations that Claude did a good chunk of work. Mainly I used him for styling & design cues, because I didn't want to conecrn myself a lot about those  with this project. My main goal was to learn Angular & .NET, so I gave up styling to LLM so I could focus on working on core funcionality. I also used Claude during implementing validation, to check if I missed some case that data would be invalid, but could pass validation. Other than that I asked some general questions about proper structurization of a project (both Api and Web part) and some weird bugs I encountered and couldn't figure out on my own.
+
+I'm aware of lack of proper testing suite for the backend and will want to work on that next. I also didn't implement refresh tokens as of yet, but will work on that too. I'm aware of problems it generates at least, so there's that.
 
 ---
 
