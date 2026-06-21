@@ -30,5 +30,15 @@ services:
       postgres:
         condition: service_healthy
 
+  web:
+    build:
+      context: Web
+      dockerfile: Dockerfile
+    container_name: bookflix-web
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
