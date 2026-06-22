@@ -3,7 +3,7 @@ import { Injectable, computed, signal, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { TokenService } from '../auth/token.service';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 type CurrentUser = { id: number; email: string; username: string } | null;
 
@@ -19,7 +19,20 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.httpClient
-      .post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
+      .post<{
+        token: string;
+      }>(`${this.apiUrl}/login`, { email, password }, { withCredentials: true })
+      .pipe(
+        tap((res) => {
+          this.tokenService.setToken(res.token);
+          this.currentUser.set(this.userFromToken());
+        }),
+      );
+  }
+
+  refresh() {
+    return this.httpClient
+      .post<{ token: string }>(`${this.apiUrl}/refresh`, {}, { withCredentials: true })
       .pipe(
         tap((res) => {
           this.tokenService.setToken(res.token);
@@ -33,9 +46,16 @@ export class AuthService {
   }
 
   logout() {
-    this.tokenService.removeToken();
-    this.currentUser.set(null);
-    this.router.navigate(['/']);
+    this.httpClient
+      .post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
+      .pipe(
+        finalize(() => {
+          this.tokenService.removeToken();
+          this.currentUser.set(null);
+          this.router.navigate(['/']);
+        }),
+      )
+      .subscribe();
   }
 
   getUserId(): number | null {
