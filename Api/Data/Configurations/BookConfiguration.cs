@@ -54,6 +54,6 @@ public class BookConfiguration: IEntityTypeConfiguration<Book>
                 .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Category);
-        builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.UserId).IsUnique();
     }
 }

@@ -1,0 +1,37 @@
+@host = http://localhost:8080
+
+### Register test account
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "username": "testuser",
+  "password": "Test1234"
+}
+
+### Login to test account
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "Test1234"
+}
+
+### Request to protected endpoint
+GET {{host}}/api/books/mine
+Authorization: Bearer {{authToken}}
+
+### Refresh access token 
+POST {{host}}/api/auth/refresh
+
+### Refresh again
+POST {{host}}/api/auth/refresh
+
+### Logout to revoke current refresh token
+POST {{host}}/api/auth/logout
+
+### Try to refresh after revoking a token, expect 401
+POST {{host}}/api/auth/refresh
+

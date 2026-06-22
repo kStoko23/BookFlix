@@ -1,6 +1,7 @@
 ﻿using Api.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
@@ -38,5 +39,18 @@ public class JwtService
         );
         
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+    
+    public string GetRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+    public string HashRefreshToken(string token)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+        return Convert.ToBase64String(bytes);
     }
 }

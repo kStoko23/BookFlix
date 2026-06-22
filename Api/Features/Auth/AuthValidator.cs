@@ -1,5 +1,6 @@
 ﻿using System.Net.Mail;
 using System.Text.RegularExpressions;
+using Api.Entities;
 
 namespace Api.Features.Auth;
 
