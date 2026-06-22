@@ -19,10 +19,12 @@ export class Hero {
   currentIndex = signal<number>(0);
   private timer?: ReturnType<typeof setInterval>;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.startTimer();
+  }
 
   getImageUrl(book: Book): string {
-    return `https://picsum.photos/seed/book${book.id}/1600/1000.webp`;
+    return `http://imageipsum.com/1200x675`;
   }
 
   goToSlide(index: number) {
