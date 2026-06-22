@@ -29,7 +29,7 @@ export class Navbar {
 
   protected menuOpen = signal(false);
   protected mobileCategoriesOpen = signal(false);
-  protected isLoggedIn = signal(this.authService.isLoggedIn());
+  protected isLoggedIn = computed(() => this.authService.isLoggedIn());
 
   categories = Object.values(BookCategory)
     .filter((v): v is BookCategory => typeof v === 'number')

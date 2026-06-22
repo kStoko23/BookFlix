@@ -65,10 +65,10 @@
           </div>
         </ng-template>
       </li>
+      <li>
+        <a routerLink="/my-list" class="nav-link">My Books</a>
+      </li>
       @if (isLoggedIn()) {
-        <li>
-          <a routerLink="/my-list" class="nav-link">My Books</a>
-        </li>
         <li>
           <app-button variant="primary" href="/books/new">Add book</app-button>
         </li>
