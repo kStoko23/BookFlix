@@ -75,7 +75,9 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
     
     if (app.Environment.IsDevelopment())
+        Console.WriteLine("Seeding databse...");
         await DbSeeder.SeedAsync(db);
+        Console.WriteLine("Seeding databse complete.");
 }
 
 app.UseCors("Frontend");
