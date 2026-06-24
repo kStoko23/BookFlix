@@ -4,7 +4,7 @@ A full-stack demo application, a book library in style of Netflix. Built for lea
 
 I tried to not use AI first, but develop as much as I can by myself (again to learn that stuff better), but there were situations that Claude did a good chunk of work. Mainly I used him for styling & design cues, because I didn't want to conecrn myself a lot about those  with this project. My main goal was to learn Angular & .NET, so I gave up styling to LLM so I could focus on working on core funcionality. I also used Claude during implementing validation, to check if I missed some case that data would be invalid, but could pass validation. Other than that I asked some general questions about proper structurization of a project (both Api and Web part) and some weird bugs I encountered and couldn't figure out on my own.
 
-I'm aware of lack of proper testing suite for the backend and will want to work on that next. I also didn't implement refresh tokens as of yet, but will work on that too. I'm aware of problems it generates at least, so there's that.
+I'm aware of lack of proper testing suite for the backend and will want to work on that next. I'm aware of problems it generates at least, so there's that.
 
 ---
 
@@ -13,7 +13,7 @@ I'm aware of lack of proper testing suite for the backend and will want to work 
 BookFlix lets authenticated users maintain their own book collection: add books with metadata (title, author, category, ISBN, rating), browse, edit, and delete them. Each user's library is public for other users and protected against other users deleting/editing with JWT. The project exists as a learning reference for:
 
 - Building a secure REST API with ASP.NET Core minimal APIs
-- Implementing JWT-based authentication
+- Implementing JWT-based authentication with refresh tokens
 - Consuming a backend from an Angular SPA with HTTP interceptors, route guards
 - Containerising a multi-service app with Docker Compose
 
@@ -121,6 +121,11 @@ BookFlix/
 │   ├── Migrations/       # Migrations
 │   ├── Program.cs
 │   └── Dockerfile
+├── Api.Tests/            # Api test suite
+│   ├── Unit/
+│   │   ├── AuthValidatorTests.cs # AuthValidator tests
+│   │   ├── BookValidatorTests.cs # BookValidator test
+│   │   ├── JwtTests.cs           # JwtService tests
 ├── Web/                  # Angular frontend
 │   ├── src/
 │   │   ├── app/
