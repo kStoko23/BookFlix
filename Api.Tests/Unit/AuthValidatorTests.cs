@@ -1,6 +1,6 @@
 ﻿using Api.Features.Auth;
 
-namespace DefaultNamespace;
+namespace Api.Tests.Unit;
 
 public class AuthValidatorTests
 {
