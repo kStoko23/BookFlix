@@ -2,7 +2,7 @@
 using Api.Entities;
 using Api.Features.Books;
 
-namespace Api.Features.Auth;
+namespace Api.Features.Books;
 
 public class BookValidator
 {

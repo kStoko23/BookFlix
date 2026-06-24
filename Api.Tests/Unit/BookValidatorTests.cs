@@ -116,6 +116,23 @@ public class BookValidatorTests
         Assert.Contains("Description is too long", errors["description"]);
     }
 
+    [Fact]
+    public void ValidateDescription_WhenNull_ShouldNotReturnError()
+    {
+        var request = new CreateBookRequest(
+            "Title",
+            "Author",
+            null,
+            null,
+            "1234567890",
+            100,
+            3);
+
+        var errors = _validator.ValidateCreateOrUpdateRequest(request);
+
+        Assert.Empty(errors);
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -248,6 +265,38 @@ public class BookValidatorTests
 
         Assert.Contains("category", errors.Keys);
         Assert.Contains("Category is invalid", errors["category"]);
+    }
+    
+    [Fact]
+    public void ValidateMultipleViolations_ShouldAccumulateErrorsPerField()
+    {
+        var validator = new BookValidator();
+
+        var request = new CreateBookRequest(
+            "",
+            "",
+            "   ",
+            null,
+            "invalid",
+            0,
+            10);
+
+        var errors = validator.ValidateCreateOrUpdateRequest(request);
+
+        Assert.Contains("title", errors.Keys);
+        Assert.Contains("Title is required", errors["title"]);
+
+        Assert.Contains("author", errors.Keys);
+        Assert.Contains("Author is required", errors["author"]);
+
+        Assert.Contains("isbn", errors.Keys);
+        Assert.Contains("Given ISBN is not valid ISBN number", errors["isbn"]);
+
+        Assert.Contains("pages", errors.Keys);
+        Assert.Contains("Number of pages is required", errors["pages"]);
+
+        Assert.Contains("rating", errors.Keys);
+        Assert.Contains("Rating can only be between 1 and 5", errors["rating"]);
     }
 
     [Theory]
