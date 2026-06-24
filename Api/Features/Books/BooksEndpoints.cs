@@ -200,7 +200,7 @@ public static class BooksEndpoints
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
-        if (errors.Count > 0)
+        if (validator.HasErrors)
         {
             return Results.ValidationProblem(errors);
         }
@@ -243,7 +243,7 @@ public static class BooksEndpoints
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
-        if (errors.Count > 0)
+        if (validator.HasErrors)
         {
             return Results.ValidationProblem(errors);
         }

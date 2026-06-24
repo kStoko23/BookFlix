@@ -2,6 +2,7 @@ using System.Text;
 using Api.Data;
 using Api.Features.Auth;
 using Api.Features.Books;
+using Api.Middleware;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key missing"))),
         };
     });
 
@@ -67,18 +68,26 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<BooksDbContext>();
     db.Database.Migrate();
-    
+
     if (app.Environment.IsDevelopment())
+    {
         Console.WriteLine("Seeding databse...");
         await DbSeeder.SeedAsync(db);
         Console.WriteLine("Seeding databse complete.");
+    }
 }
+
+app.UseExceptionHandler();
+app.UseStatusCodePages(); 
 
 app.UseCors("Frontend");
 app.UseAuthentication();

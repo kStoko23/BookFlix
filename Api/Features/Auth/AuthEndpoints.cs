@@ -26,10 +26,10 @@ public static class AuthEndpoints
     {
         var validator = new AuthValidator();
         var errors = validator.ValidateLoginRequest(request);
-        if (errors.Count > 0)
+        if (validator.HasErrors)
             return Results.ValidationProblem(errors);
 
-        var user = await db.Users.FirstOrDefaultAsync(x => x.Email == request.Email.ToLower());
+        var user = await db.Users.FirstOrDefaultAsync(x => x.Email == request.Email.Trim().ToLower());
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             return Results.Unauthorized();
@@ -70,10 +70,10 @@ public static class AuthEndpoints
     {
         var validator = new AuthValidator();
         var errors = validator.ValidateRegisterRequest(request);
-        if (errors.Count > 0)
+        if (validator.HasErrors)
             return Results.ValidationProblem(errors);
 
-        if (await db.Users.AnyAsync(x => x.Email == request.Email))
+        if (await db.Users.AnyAsync(x => x.Email == request.Email.Trim().ToLower()))
             return Results.Conflict(new { message = "Email already taken" });
 
         var user = new User
@@ -99,8 +99,16 @@ public static class AuthEndpoints
         var refreshTokenHash = jwtService.HashRefreshToken(rawToken);
         var stored = await db.RefreshTokens.FirstOrDefaultAsync(x => x.TokenHash == refreshTokenHash);
 
-        if (stored == null || stored.Revoked == true || DateTime.UtcNow > stored.ExpiresAt)
+        if (stored == null || DateTime.UtcNow > stored.ExpiresAt)
             return Results.Unauthorized();
+
+        if (stored.Revoked)
+        {
+            await db.RefreshTokens.Where(x => x.UserId == stored.UserId && !x.Revoked)
+                .ExecuteUpdateAsync(s => s.SetProperty(x => x.Revoked, true));
+
+            return Results.Unauthorized();
+        }
         
         var user = await db.Users.FindAsync(stored.UserId);
         if (user ==null)
