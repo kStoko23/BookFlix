@@ -199,11 +199,11 @@ public static class BooksEndpoints
     {
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
-        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (validator.HasErrors)
         {
             return Results.ValidationProblem(errors);
         }
+        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (await db.Books.AnyAsync(x => x.Isbn == cleanedIsbn))
             return Results.Conflict(new { message = "Duplicate ISBN number" });
 
@@ -242,11 +242,11 @@ public static class BooksEndpoints
     {
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
-        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (validator.HasErrors)
         {
             return Results.ValidationProblem(errors);
         }
+        var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var book = await db.Books.FindAsync(id);
         if (book == null) return Results.NotFound();
