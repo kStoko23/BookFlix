@@ -20,7 +20,7 @@ public static class BooksEndpoints
         group.MapGet("/{id:long}", GetBook);
         group.MapGet("/mine", GetMyBooks).RequireAuthorization();
         group.MapPost("/", CreateBook).RequireAuthorization();
-        group.MapPut("/{id:long}", PutBook).RequireAuthorization();
+        group.MapPut("/{id:long}", UpdateBook).RequireAuthorization();
         group.MapDelete("/{id:long}", DeleteBook).RequireAuthorization();
     }
 
@@ -201,7 +201,7 @@ public static class BooksEndpoints
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         if (validator.HasErrors)
         {
-            return Results.ValidationProblem(errors);
+            return Results.ValidationProblem(errors, statusCode: 422);
         }
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (await db.Books.AnyAsync(x => x.Isbn == cleanedIsbn))
@@ -238,13 +238,13 @@ public static class BooksEndpoints
 
         return Results.Created($"/api/books/{book.Id}", response);
     }
-    private static async Task<IResult> PutBook([FromRoute] long id, [FromBody] UpdateBookRequest request, BooksDbContext db, ClaimsPrincipal user)
+    private static async Task<IResult> UpdateBook([FromRoute] long id, [FromBody] UpdateBookRequest request, BooksDbContext db, ClaimsPrincipal user)
     {
         var validator = new BookValidator();
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         if (validator.HasErrors)
         {
-            return Results.ValidationProblem(errors);
+            return Results.ValidationProblem(errors, statusCode: 422);
         }
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
