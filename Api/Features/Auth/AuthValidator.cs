@@ -50,7 +50,7 @@ public class AuthValidator
             return this;
         }
 
-        if (!IsValidEmail(email))
+        if (!IsValidEmail(email.Trim()))
             AddError("email", "Email is not a valid email address");
 
         return this;
