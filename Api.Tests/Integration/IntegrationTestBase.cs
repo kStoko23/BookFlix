@@ -96,4 +96,8 @@ public abstract class IntegrationTestBase : IClassFixture<BooksApiFactory>, IAsy
         await db.SaveChangesAsync();
         return book.Id;
     }
+    protected IServiceScope CreateScope()
+    {
+        return _factory.Services.CreateScope();
+    }
 }
