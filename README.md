@@ -4,7 +4,7 @@ A full-stack demo application, a book library in style of Netflix. Built for lea
 
 I tried to not use AI first, but develop as much as I can by myself (again to learn that stuff better), but there were situations that Claude did a good chunk of work. Mainly I used him for styling & design cues, because I didn't want to conecrn myself a lot about those  with this project. My main goal was to learn Angular & .NET, so I gave up styling to LLM so I could focus on working on core funcionality. I also used Claude during implementing validation, to check if I missed some case that data would be invalid, but could pass validation. Other than that I asked some general questions about proper structurization of a project (both Api and Web part) and some weird bugs I encountered and couldn't figure out on my own.
 
-I'm aware of lack of proper testing suite for the backend and will want to work on that next. I'm aware of problems it generates at least, so there's that.
+I also developed a test suite for the backend part, including both unit and integration tests. I tried to cover as many cases as I could think of and overall I think I did a good job at that. All endpoints, validators and services are covered with tests, all passing. In toital there are 150 tests in `Api.Tests/`.
 
 ---
 
@@ -32,6 +32,7 @@ BookFlix lets authenticated users maintain their own book collection: add books 
 | Auth             | JWT Bearer (HMAC-SHA256)             |
 | Password hashing | BCrypt.Net                           |
 | Rate limiting    | ASP.NET Core built-in (fixed window) |
+| Testing    | xUnit, TestContainers, ASP.NET Core MVC Testing |
 
 ### Frontend (`Web/`)
 
@@ -62,6 +63,8 @@ BookFlix lets authenticated users maintain their own book collection: add books 
 **Minimal APIs over controllers** - The backend uses ASP.NET Core's minimal API style (`MapBooksEndpoints`, `MapAuthEndpoints`). As it was my first time working with ASP.NET Core I didn't want to overcomplicate things for myself. Also, it's a fairly simple API that shouldn't require more advanced approaches.
 
 **JWT without ASP.NET Identity** - Auth is handled manually via a `JwtService` that signs tokens with `HMAC-SHA256` and passwords are hashed with BCrypt. I wanted to implement basic JWT auth by myself as much as I could and wantd to limit abstracion, to learn more about the basics.
+
+**Refresh token via HttpOnly Cookie** - Refresh tokens are stored server-side in the database as BCrypt hashes and passed to the client exclusively via an `HttpOnly`, `SameSite=Strict`, `Secure` (in prod env) cookie, making them inaccessible to JavaScript and significantly reducing XSS exposure. The cookie is scoped to `/api/auth`. Each refresh rotates the token - the old one is revoked and a new one is issued - and if a previously revoked token is ever reused, all active tokens for that user are immediately invalidated as a theft detection measure.
 
 **Functional Angular interceptor** - The frontend attaches the JWT from `localStorage` to every outgoing request via a standalone `authInterceptor` function registered in `app.config.ts`. Route guards protect authenticated pages.
 
@@ -111,7 +114,6 @@ The development frontend points directly at `http://localhost:8080/api` (see `en
 ---
 
 ## Project structure
-
 ```
 BookFlix/
 ├── Api/                  # ASP.NET Core backend
@@ -122,10 +124,15 @@ BookFlix/
 │   ├── Program.cs
 │   └── Dockerfile
 ├── Api.Tests/            # Api test suite
+│   ├── Integration/      # Integration tests using Testcontainers + PostgreSQL
+│   │   ├── Auth/         # Login, Register, Refresh, Logout endpoint tests
+│   │   ├── Books/        # CRUD endpoint tests for all book endpoints
+│   │   ├── BooksApiFactory.cs    # WebApplicationFactory with Testcontainers setup
+│   │   └── IntegrationTestBase.cs # Shared base class with helpers and lifecycle
 │   ├── Unit/
 │   │   ├── AuthValidatorTests.cs # AuthValidator tests
-│   │   ├── BookValidatorTests.cs # BookValidator test
-│   │   ├── JwtTests.cs           # JwtService tests
+│   │   ├── BookValidatorTests.cs # BookValidator tests
+│   │   └── JwtTests.cs           # JwtService tests
 ├── Web/                  # Angular frontend
 │   ├── src/
 │   │   ├── app/
