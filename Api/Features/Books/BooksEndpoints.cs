@@ -201,7 +201,7 @@ public static class BooksEndpoints
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         if (validator.HasErrors)
         {
-            return Results.ValidationProblem(errors, statusCode: 422);
+            return Results.ValidationProblem(errors, statusCode: StatusCodes.Status422UnprocessableEntity);
         }
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         if (await db.Books.AnyAsync(x => x.Isbn == cleanedIsbn))
@@ -244,7 +244,7 @@ public static class BooksEndpoints
         var errors = validator.ValidateCreateOrUpdateRequest(request);
         if (validator.HasErrors)
         {
-            return Results.ValidationProblem(errors, statusCode: 422);
+            return Results.ValidationProblem(errors, statusCode: StatusCodes.Status422UnprocessableEntity);
         }
         var cleanedIsbn = request.Isbn.Replace("-", "").Trim();
         var userId = long.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);

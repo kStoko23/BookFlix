@@ -27,7 +27,7 @@ public static class AuthEndpoints
         var validator = new AuthValidator();
         var errors = validator.ValidateLoginRequest(request);
         if (validator.HasErrors)
-            return Results.ValidationProblem(errors);
+            return Results.ValidationProblem(errors, statusCode: StatusCodes.Status422UnprocessableEntity);
 
         var user = await db.Users.FirstOrDefaultAsync(x => x.Email == request.Email.Trim().ToLower());
 
@@ -57,7 +57,7 @@ public static class AuthEndpoints
         context.Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = !environment.IsDevelopment(),
+            Secure = !environment.IsDevelopment() && !environment.IsEnvironment("Testing"),
             SameSite = SameSiteMode.Strict,
             Expires =  DateTime.UtcNow.AddDays(ExpirationDays),
             Path = "/api/auth",
@@ -71,7 +71,7 @@ public static class AuthEndpoints
         var validator = new AuthValidator();
         var errors = validator.ValidateRegisterRequest(request);
         if (validator.HasErrors)
-            return Results.ValidationProblem(errors);
+            return Results.ValidationProblem(errors, statusCode: StatusCodes.Status422UnprocessableEntity);
 
         if (await db.Users.AnyAsync(x => x.Email == request.Email.Trim().ToLower()))
             return Results.Conflict(new { message = "Email already taken" });
@@ -133,7 +133,7 @@ public static class AuthEndpoints
         context.Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = !environment.IsDevelopment(),
+            Secure = !environment.IsDevelopment() && !environment.IsEnvironment("Testing"),
             SameSite = SameSiteMode.Strict,
             Expires =  DateTime.UtcNow.AddDays(ExpirationDays),
             Path = "/api/auth"
