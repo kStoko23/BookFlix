@@ -77,13 +77,6 @@
 
     <div class="hidden md:flex items-center gap-3">
       @if (isLoggedIn()) {
-        <a
-          routerLink="/profile"
-          (click)="closeMenu()"
-          class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center"
-        >
-          {{ initials() }}
-        </a>
         <button (click)="logout()" aria-label="Logout" class="text-white w-5 h-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -196,14 +189,6 @@
 
     <div class="flex w-full max-w-xs flex-col items-center gap-4">
       @if (isLoggedIn()) {
-        <div class="flex items-center gap-3">
-          <a
-            routerLink="/profile"
-            (click)="closeMenu()"
-            class="bg-accent text-white rounded-full w-10 h-10 flex items-center justify-center"
-            >{{ initials() }}</a
-          >
-        </div>
         <button (click)="logout()" aria-label="Logout" class="text-white w-5 h-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

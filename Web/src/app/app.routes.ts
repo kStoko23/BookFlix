@@ -3,7 +3,6 @@ import { authGuard } from './core/auth/auth.guard';
 import { Home } from './features/home/home';
 import { Register } from './features/auth/register/register';
 import { Login } from './features/auth/login/login';
-import { Profile } from './features/profile/profile';
 import { BookDetails } from './features/books/book-details/book-details';
 import { MyBooksPage } from './features/books/my-books-page/my-books-page';
 import { AllBooksPage } from './features/books/all-books-page/all-books-page';
@@ -15,7 +14,6 @@ export const routes: Routes = [
 
   { path: 'my-list', component: MyBooksPage, canActivate: [authGuard] },
   { path: 'discover', component: AllBooksPage },
-  { path: 'profile', component: Profile, canActivate: [authGuard] },
 
   { path: 'books/new', component: BookForm, canActivate: [authGuard] },
   { path: 'books/:id/edit', component: BookForm, canActivate: [authGuard] },

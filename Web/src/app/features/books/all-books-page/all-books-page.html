@@ -1,4 +1,4 @@
-<div class="px-6 lg:px-14 py-8 bg-primary h-screen">
+<div class="px-6 lg:px-14 py-8 bg-primary min-h-screen">
   <h2 class="font-mono text-2xl lg:text-4xl font-bold text-content-primary mb-6">All Books</h2>
   <div class="relative flex flex-col md:flex-row gap-6">
     <aside class="sticky self-start top-8 w-full md:w-64 md:shrink-0">
@@ -20,7 +20,7 @@
           </div>
         </div>
       } @else if (state.error()) {
-        <div class="w-full h-[90vh] px-6 lg:px-14 py-8 bg-primary">
+        <div class="w-full h-[90vh] px-6 lg:px-14 bg-primary">
           <div
             class="h-full rounded-lg bg-card border-2 border-border flex items-center justify-center"
           >
@@ -28,7 +28,7 @@
           </div>
         </div>
       } @else if (state.books().length === 0) {
-        <div class="w-full h-[90vh] px-6 lg:px-14 py-8 bg-primary">
+        <div class="w-full h-[90vh] px-6 lg:px-14 bg-primary">
           <div
             class="h-full rounded-lg bg-card border-2 border-border flex items-center justify-center"
           >

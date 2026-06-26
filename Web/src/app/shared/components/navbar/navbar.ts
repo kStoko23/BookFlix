@@ -41,11 +41,6 @@ export class Navbar {
     });
   }
 
-  initials = computed(() => {
-    const username = this.authService.user()?.username;
-    return username ? username.slice(0, 2).toUpperCase() : 'U';
-  });
-
   toggleMenu() {
     this.menuOpen.update((value) => !value);
   }
