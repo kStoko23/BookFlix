@@ -25,7 +25,7 @@ export class Home {
   protected booksTop = signal<Book[]>([]);
   protected books = signal<Book[]>([]);
 
-  protected isLoggedIn = signal(this.authService.isLoggedIn());
+  protected isLoggedIn = computed(() => this.authService.isLoggedIn());
   protected loadingUser = signal(true);
   protected loadingTop = signal(true);
   protected loadingCategories = signal(true);
