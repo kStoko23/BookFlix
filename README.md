@@ -1,10 +1,30 @@
 # BookFlix
 
+![.NET](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Minimal%20APIs-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Entity Framework Core](https://img.shields.io/badge/EF%20Core-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![xUnit](https://img.shields.io/badge/xUnit-Tests-5E2B97?style=for-the-badge)
+![Testcontainers](https://img.shields.io/badge/Testcontainers-Integration%20Tests-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![Scalar](https://img.shields.io/badge/Scalar-OpenAPI-0F172A?style=for-the-badge)
+
+<sub>
+Who doesn't love badges, right?
+</sub>
+
+---
+
 A full-stack demo application, a book library in style of Netflix. Built for learning purposes, demonstrating JWT authentication, RESTful CRUD APIs, and a modern SPA frontend. I wanted to learn fullstack development and decided on Angular & .NET. Used both of them at Uni and enjoyed working with them for no particular reasons, I guess that's because they were my first technologies used so that's probably why. 
 
 I tried to not use AI first, but develop as much as I can by myself (again to learn that stuff better), but there were situations that Claude did a good chunk of work. Mainly I used him for styling & design cues, because I didn't want to conecrn myself a lot about those  with this project. My main goal was to learn Angular & .NET, so I gave up styling to LLM so I could focus on working on core funcionality. I also used Claude during implementing validation, to check if I missed some case that data would be invalid, but could pass validation. Other than that I asked some general questions about proper structurization of a project (both Api and Web part) and some weird bugs I encountered and couldn't figure out on my own.
 
-I also developed a test suite for the backend part, including both unit and integration tests. I tried to cover as many cases as I could think of and overall I think I did a good job at that. All endpoints, validators and services are covered with tests, all passing. In toital there are 150 tests in `Api.Tests/`.
+I also developed a test suite for the backend part, including both unit and integration tests. I tried to cover as many cases as I could think of and overall I think I did a good job at that. All endpoints, validators and services are covered with tests, all passing. In total there are 150 tests in `Api.Tests/`.
 
 ---
 
@@ -23,16 +43,18 @@ BookFlix lets authenticated users maintain their own book collection: add books 
 
 ### Backend (`Api/`)
 
-| Concern          | Choice                               |
-| ---------------- | ------------------------------------ |
-| Runtime          | .NET 10 / ASP.NET Core               |
-| API style        | Minimal APIs                         |
-| ORM              | Entity Framework Core 10             |
-| Database         | PostgreSQL 18                        |
-| Auth             | JWT Bearer (HMAC-SHA256)             |
-| Password hashing | BCrypt.Net                           |
-| Rate limiting    | ASP.NET Core built-in (fixed window) |
-| Testing    | xUnit, TestContainers, ASP.NET Core MVC Testing |
+| Concern              | Choice                               |
+| -------------------- | ------------------------------------ |
+| Runtime              | .NET 10 / ASP.NET Core               |
+| API style            | Minimal APIs                         |
+| ORM                  | Entity Framework Core 10             |
+| Database             | PostgreSQL 18                        |
+| Auth                 | JWT Bearer (HMAC-SHA256)             |
+| Password hashing     | BCrypt.Net                           |
+| API documentation    | Scalar OpenAPI                       |
+| Rate limiting        | ASP.NET Core built-in (fixed window) |
+| Testing              | xUnit, Testcontainers, ASP.NET Core MVC Testing |
+| CI                   | GitHub Actions                       |
 
 ### Frontend (`Web/`)
 
@@ -72,6 +94,12 @@ BookFlix lets authenticated users maintain their own book collection: add books 
 
 **Data validation** - I tried to protect backend from errors as much as I could how to, so I used seperate `BookValidator.cs` and `AuthValdiator.cs` classes t validate input data, before any operations with DB. I might have missed some, but I don't think I did. PS. Validating ISBN is quite complex, so I opted for _not so perfect_ Regex pattern, that checkes the general structure, but doesn' check the checksum. For the purposes of this app it's sufficient, but I'm aware it could be added.
 
+**Global exception handling** - Unexpected exceptions are handled by a centralized exception handler returning RFC7807 ProblemDetails responses. This keeps endpoint implementations cleaner and ensures clients always receive a consistent error format without exposing internal details.
+
+**Scalar for API documentation** - Instead of Swagger UI the project uses Scalar as the OpenAPI client. I simply find it cleaner and nicer to work with during development while still relying on the generated OpenAPI specification underneath.
+
+**Continuous Integration** - Every push and pull request triggers a GitHub Actions workflow that restores dependencies, builds the solution, runs the complete test suite and publishes the API artifact. I wanted every commit on the main branch to always represent a working application.
+
 ---
 
 ## Running with Docker
@@ -87,7 +115,11 @@ docker compose up --build
 | PostgreSQL | localhost:5432        |
 
 The API applies EF Core migrations on startup so the database schema is created automatically.
+When the API is running, interactive documentation is available at
 
+```bash
+http://localhost:8080/scalar/v1
+```
 ---
 
 ## Running locally (development)
@@ -144,3 +176,18 @@ BookFlix/
 │   └── Dockerfile
 └── compose.yaml
 ```
+
+---
+
+## Future improvements
+
+There are still plenty of things I'd like to improve as I continue learning:
+
+- Email verification and password reset
+- Role-based authorization
+- Search, filtering and pagination
+- Media uploads & storage
+- Caching
+- Background jobs
+
+Will most likely expand on those in future project with the same stack, bu using Controllers instead of MinimalAPIs this time.
