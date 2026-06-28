@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<BooksDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-
+builder.Services.AddOpenApi();
 builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -90,6 +91,12 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
 app.UseExceptionHandler();
 app.UseStatusCodePages(); 
 
@@ -102,6 +109,7 @@ if (!app.Environment.IsEnvironment("Testing"))
     app.UseRateLimiter();
 }
 
+app.UseHttpsRedirection();
 app.MapBooksEndpoints();
 app.MapAuthEndpoints();
 
