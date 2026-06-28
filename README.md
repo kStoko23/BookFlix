@@ -1,24 +1,5 @@
 # BookFlix
 
-![.NET](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Minimal%20APIs-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Entity Framework Core](https://img.shields.io/badge/EF%20Core-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
-![xUnit](https://img.shields.io/badge/xUnit-Tests-5E2B97?style=for-the-badge)
-![Testcontainers](https://img.shields.io/badge/Testcontainers-Integration%20Tests-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
-![Scalar](https://img.shields.io/badge/Scalar-OpenAPI-0F172A?style=for-the-badge)
-
-<sub>
-Who doesn't love badges, right?
-</sub>
-
----
 
 A full-stack demo application, a book library in style of Netflix. Built for learning purposes, demonstrating JWT authentication, RESTful CRUD APIs, and a modern SPA frontend. I wanted to learn fullstack development and decided on Angular & .NET. Used both of them at Uni and enjoyed working with them for no particular reasons, I guess that's because they were my first technologies used so that's probably why. 
 
